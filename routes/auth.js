@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../config/secret');
+var mailer = require('../helpers/mailer')
 var residents = require('../models/resident');
 var authorities = require('../models/authority')
 
@@ -19,8 +20,19 @@ router.post("/registerResident",(req,res)=>{
       res.status(409).send(err)
     }
     else{
-      var token = jwt.sign({ id: newResident._id}, config.secret, {
-        expiresIn: 86400 //expired in 24 hours
+      var token = jwt.sign({ id: newResident._id}, config.secret, {expiresIn: 86400});
+      var mailOptions = {
+        from: 'citra.app.mailer@gmail.com',
+        to: newResident.email,
+        subject: 'Email verification',
+        text: 'Your verification code is ' + newResident._id
+      };
+      mailer.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
       });
       res.send([newResident,{"token":token}])
     }
@@ -42,8 +54,19 @@ router.post("/registerAuthority",(req,res)=>{
       res.status(409).send(err)
     }
     else{
-      var token = jwt.sign({ id: newAuthority._id}, config.secret, {
-        expiresIn: 86400 //expired in 24 hours
+      var token = jwt.sign({ id: newAuthority._id}, config.secret, {expiresIn: 86400 });
+      var mailOptions = {
+        from: 'citra.app.mailer@gmail.com',
+        to: newAuthorityt.email,
+        subject: 'Email verification',
+        text: 'Your verification code is ' + newResident._id
+      };
+      mailer.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
       });
       res.send([newAuthority,{"token":token}])
     }
@@ -87,6 +110,34 @@ router.post("/authorityLogin",(req,res)=>{
         res.status(403).send("Auth Error")
       }
     }
+  })
+})
+
+router.get("/verifyResidentEmail/:id",(req,res)=>{
+  residents.findByIdAndUpdate(req.params.id,{_emailVerified:true}).then((resident)=>{
+    if(resident!=null){
+      res.send("Verified")
+    }
+    else{
+      res.status(404).send("Account Not Found")
+    }
+  }).catch((err)=>{
+    console.log(err)
+    res.status(500).send("DB error")
+  })
+})
+
+router.get("/verifyAuthorityEmail/:id",(req,res)=>{
+  authorities.findByIdAndUpdate(req.params.id,{_emailVerified:true}).then((authority)=>{
+    if(authority!=null){
+      res.send("Verified")
+    }
+    else{
+      res.status(404).send("Account Not Found")
+    }
+  }).catch((err)=>{
+    console.log(err)
+    res.status(500).send("DB error")
   })
 })
 
