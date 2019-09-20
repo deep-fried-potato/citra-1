@@ -32,7 +32,10 @@ router.post("/registerAuthority",(req,res)=>{
   var authority = new authorities({
     name: req.body.name,
     email: req.body.email,
-    password: hashedPassword
+    password: hashedPassword,
+    registrationNumber:req.body.registrationNumber,
+    typeOfAuthority:req.body.typeOfAuthority,
+    issuesAddressed:req.body.issuesAddressed
   })
   authority.save((err,newAuthority)=>{
     if(err){
@@ -77,7 +80,7 @@ router.post("/authorityLogin",(req,res)=>{
     }
     else{
       if(bcrypt.compareSync(req.body.password,authority.password)){
-        var token = jwt.sign({ id: resident._id }, config.secret, { expiresIn: 86400 });
+        var token = jwt.sign({ id: authority._id }, config.secret, { expiresIn: 86400 });
         res.send({"token":token})
       }
       else{
