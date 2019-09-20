@@ -1,2 +1,2 @@
-# soad
-Repo for SOAD project 2019-20.
+# citra
+Civic Issue Tracking and Management System
