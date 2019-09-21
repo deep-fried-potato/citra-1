@@ -12,6 +12,14 @@ router.get("/profile",residentValidate,(req,res)=>{
   })
 })
 
+router.post("/deleteProfile",residentValidate,(req,res)=>{
+  residents.findByIdAndDelete(req.body.residentId).then((resident)=>{
+    res.send("Deleted")
+  }).catch((err)=>{
+    res.status(500).send("DB error")
+  })
+})
+
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.residentId = id;

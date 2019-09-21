@@ -141,4 +141,5 @@ router.get("/verifyAuthorityEmail/:id",(req,res)=>{
   })
 })
 
+
 module.exports = router

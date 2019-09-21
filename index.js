@@ -18,7 +18,7 @@ app.use("/auth",auth)
 app.use("/resident",residentRoutes)
 app.use("/authority",authorityRoutes)
 
-mongoose.connect('mongodb://localhost/citra', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://dbman:royya123@citra-pj0vn.mongodb.net/citra?retryWrites=true&w=majority', {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
