@@ -31,6 +31,7 @@ var mongoose = require('mongoose');
     },
     addedDate:{
       type:Date,
+      default: Date.now,
       required:true
     },
     upvotes:[{
