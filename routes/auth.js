@@ -57,9 +57,9 @@ router.post("/registerAuthority",(req,res)=>{
       var token = jwt.sign({ id: newAuthority._id}, config.secret, {expiresIn: 86400 });
       var mailOptions = {
         from: 'citra.app.mailer@gmail.com',
-        to: newAuthorityt.email,
+        to: newAuthority.email,
         subject: 'Email verification',
-        text: 'Your verification code is ' + newResident._id
+        text: 'Your verification code is ' + newAuthority._id
       };
       mailer.sendMail(mailOptions, function(error, info){
         if (error) {
