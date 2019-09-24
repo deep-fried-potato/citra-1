@@ -3,6 +3,7 @@ var chaiHttp = require('chai-http');
 var app = require('../index')
 var token = ""
 var id = ""
+var issueId = ""
 chai.use(chaiHttp);
 chai.should();
 describe("residents", () => {
@@ -54,6 +55,59 @@ describe("residents", () => {
         })
     })
   })
+  describe("POST /resident/addIssue",()=>{
+    it("Should get add new issue",(done)=>{
+    var issueDetails =  {
+      	"title":"TEST!!!: A RANDOM POTHOLE!",
+      	"description":"pothole att so and so",
+      	"photo":"bit.ly/ADEF",
+      	"typeOfIssue":"Roads",
+      	"location":{
+      		"xcor":17.04,
+      		"ycor":82.88
+      	}
+      }
+      chai.request(app)
+        .post('/resident/addIssue')
+        .set('x-access-token',token)
+        .send(issueDetails)
+        .end((err,res)=>{
+          res.should.have.status(200)
+          res.body.should.be.a('object')
+          issueId = res.body._id
+          done();
+        })
+    })
+  })
+  describe("GET /common/viewIssue",()=>{
+    it("Should get issue details",(done)=>{
+      chai.request(app)
+        .get('/common/viewIssue/'+issueId)
+        .set('x-access-token',token)
+        .end((err,res)=>{
+          res.should.have.status(200)
+          res.body.should.be.a('object')
+          done();
+        })
+    })
+  })
+  describe("POST /common/commentIssue",()=>{
+    it("Should get issue details",(done)=>{
+      var comment = {
+        text:"TEST: This is a comment "
+      }
+      chai.request(app)
+        .post('/common/commentIssue/'+issueId)
+        .set('x-access-token',token)
+        .send(comment)
+        .end((err,res)=>{
+          res.should.have.status(200)
+          res.body.should.be.a('object')
+          done();
+        })
+    })
+  })
+
   describe("POST /resident/deleteProfile",()=>{
     it("Should delete test profile ",(done)=>{
       chai.request(app)
