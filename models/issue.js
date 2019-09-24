@@ -42,14 +42,14 @@ var mongoose = require('mongoose');
       ref:'authority'
     },
     residentComments:[{
-      resident:{
+      user:{
         type:ObjectId,
         ref:'resident'
       },
       text:String
     }],
     authorityComments:[{
-      authority:{
+      user:{
         type:ObjectId,
         ref:'authority'
       },

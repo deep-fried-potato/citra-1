@@ -13,10 +13,12 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 var auth = require('./routes/auth');
 var residentRoutes = require('./routes/residentRoutes')
 var authorityRoutes = require('./routes/authorityRoutes')
+var commonRoutes = require("./routes/commonRoutes")
 
 app.use("/auth",auth)
 app.use("/resident",residentRoutes)
 app.use("/authority",authorityRoutes)
+app.use("/common",commonRoutes)
 
 mongoose.connect('mongodb+srv://dbman:royya123@citra-pj0vn.mongodb.net/citra?retryWrites=true&w=majority', {useNewUrlParser: true});
 var db = mongoose.connection;

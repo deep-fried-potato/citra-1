@@ -14,30 +14,7 @@ router.get("/profile",authorityValidate,(req,res)=>{
   })
 })
 
-router.get("/viewIssue/:issueId",authorityValidate,(req,res)=>{
-  issues.findById(req.params.issueId).populate("addedBy","name").populate("residentComments.resident","name").populate("authorityComments.authority","name").exec((err,issue)=>{
-    if(err){
-      res.status(500).send(err)
-    }
-    else{
-      res.send(issue)
-    }
-  })
-})
 
-router.post("/commentIssue/:issueId",authorityValidate,(req,res)=>{
-  var newComment = {
-    authority:req.body.authorityId,
-    text:req.body.text
-  }
-  issues.findByIdAndUpdate(req.params.issueId,{
-    $push:{authorityComments:newComment}
-  },{new:true}).then((issue)=>{
-    res.send(issue)
-  }).catch((err)=>{
-    res.status(500).send(err)
-  })
-})
 
 function authorityValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
