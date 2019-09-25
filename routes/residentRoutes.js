@@ -40,7 +40,7 @@ router.post("/addIssue",residentValidate,(req,res)=>{
 
 router.post("/upvoteIssue/:issueId",residentValidate,(req,res)=>{
   issues.findByIdAndUpdate(req.params.issueId,{
-    $push:{upvotes: req.body.residentId}
+    "$addToSet":{upvotes: req.body.residentId}
   },{new:true}).then((issue)=>{
     res.send(issue)
   }).catch((err)=>{
