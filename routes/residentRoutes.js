@@ -38,6 +38,16 @@ router.post("/addIssue",residentValidate,(req,res)=>{
   })
 })
 
+router.post("/upvoteIssue/:issueId",residentValidate,(req,res)=>{
+  issues.findByIdAndUpdate(req.params.issueId,{
+    $push:{upvotes: req.body.residentId}
+  },{new:true}).then((issue)=>{
+    res.send(issue)
+  }).catch((err)=>{
+    res.status(500).send(err)
+  })
+})
+
 
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{

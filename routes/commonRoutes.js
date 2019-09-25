@@ -30,16 +30,6 @@ router.post("/commentIssue/:issueId",userValidate,(req,res)=>{
   })
 })
 
-router.post("/upvoteIssue/:issueId",userValidate,(req,res)=>{
-  issues.findByIdAndUpdate(req.params.issueId,{
-    $push:req.body.isResident?{upvotes: req.body.userId}
-  },{new:true}).then((issue)=>{
-    res.send(issue)
-  }).catch((err)=>{
-    res.status(500).send(err)
-  })
-})
-
 function userValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.userId = id;
