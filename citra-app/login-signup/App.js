@@ -10,7 +10,13 @@ import Profile from './components/Profile';
 const Application = createStackNavigator({
   Home : {
     screen : Login,
+    navigationOptions:{
+      header: false
+    }
   },
+  Profile: {
+    screen: Profile,
+  }
 });
 const Appcontainer = createAppContainer(Application)
 
