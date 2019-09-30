@@ -63,8 +63,8 @@ describe("residents", () => {
       	"photo":"bit.ly/ADEF",
       	"typeOfIssue":"Roads",
       	"location":{
-      		"xcor":17.04,
-      		"ycor":82.88
+      		"lat":17.04,
+      		"lng":82.88
       	}
       }
       chai.request(app)

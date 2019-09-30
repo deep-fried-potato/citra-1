@@ -24,8 +24,8 @@ var mongoose = require('mongoose');
     plusCode: String,
     location:{
       type:{
-        xcor: Number,
-        ycor: Number
+        lat: Number,
+        lng: Number
       },
       required:true
     },

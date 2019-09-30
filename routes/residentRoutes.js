@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios')
 var router = express.Router()
 const token2id = require("../helpers/token2id")
 var residents = require("../models/resident")
@@ -23,18 +24,23 @@ router.post("/deleteProfile",residentValidate,(req,res)=>{
 })
 
 router.post("/addIssue",residentValidate,(req,res)=>{
-  issues.create({
-    title:req.body.title,
-    description:req.body.description,
-    photo:req.body.photo,
-    typeOfIssue:req.body.typeOfIssue,
-    location:req.body.location,
-    addedDate: new Date(),
-    addedBy:req.body.residentId
-  }).then((newIssue)=>{
-    res.send(newIssue)
+  axios.get(`https://plus.codes/api?address=${req.body.location.lat},${req.body.location.lng}&email=YOUR_EMAIL_HERE`).then((response)=>{
+    issues.create({
+      title:req.body.title,
+      description:req.body.description,
+      photo:req.body.photo,
+      typeOfIssue:req.body.typeOfIssue,
+      location:req.body.location,
+      plusCode:response.data.plus_code.global_code,
+      addedDate: new Date(),
+      addedBy:req.body.residentId
+    }).then((newIssue)=>{
+      res.send(newIssue)
+    }).catch((err)=>{
+      res.status(400).send("Error in request")
+    })
   }).catch((err)=>{
-    res.status(500).send(err)
+    res.status(400).send("Error in request")
   })
 })
 
@@ -48,6 +54,13 @@ router.post("/upvoteIssue/:issueId",residentValidate,(req,res)=>{
   })
 })
 
+router.post("/deleteIssue/:issueId",residentValidate,(req,res)=>{
+  issues.findByIdAndDelete(req.params.issueId).then((issue)=>{
+    res.send("Deleted")
+  }).catch((err)=>{
+    res.status(500).send("DB error")
+  })
+})
 
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{

@@ -5,6 +5,11 @@ var residents = require("../models/resident")
 var authorities = require("../models/authority")
 var issues = require("../models/issue")
 
+router.get("/getIssues",userValidate,(req,res)=>{
+  var rad = req.query.rad
+  var upperLat = req.query.lat + rad/(111.7) //+- 90 degree latitude overflow dekhle bhai
+  var lowerLat = req.query.lat - rad/(111.7)
+})
 router.get("/viewIssue/:issueId",userValidate,(req,res)=>{
   issues.findById(req.params.issueId).populate({path:"addedBy",select:"name"}).populate("residentComments.user","name").populate("authorityComments.user","name").exec((err,issue)=>{
     if(err){
