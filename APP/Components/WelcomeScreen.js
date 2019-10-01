@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 
-export default class Authform extends React.Component{
+export default class WelcomeScreen extends React.Component{
     render(){
         return(
             <LoginScreen />
