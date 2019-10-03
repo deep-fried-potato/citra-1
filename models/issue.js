@@ -40,7 +40,8 @@ var mongoose = require('mongoose');
     }],
     assignedAuthority:{
       type:ObjectId,
-      ref:'authority'
+      ref:'authority',
+      default:null
     },
     residentComments:[{
       user:{

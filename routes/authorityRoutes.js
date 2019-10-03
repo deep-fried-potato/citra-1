@@ -15,7 +15,14 @@ router.get("/profile",authorityValidate,(req,res)=>{
 })
 
 router.post("/claimIssue/:issueId",authorityValidate,(req,res)=>{
-  issues.findByIdAndUpdate(req.params.issueId,{$set:{assignedAuthority:req.body.authorityId}},{new:true}).then((updatedIssue)=>{
+  issues.findOneAndUpdate({_id:req.params.issueId,assignedAuthority:null},{$set:{assignedAuthority:req.body.authorityId}},{new:true}).then((updatedIssue)=>{
+    res.send(updatedIssue)
+  }).catch((err)=>{
+    res.status(400).send("bad request")
+  })
+})
+router.post("/unclaimIssue/:issueId",authorityValidate,(req,res)=>{
+  issues.findOneAndUpdate({_id:req.params.issueId,assignedAuthority:req.body.authorityId},{$set:{assignedAuthority:null}},{new:true}).then((updatedIssue)=>{
     res.send(updatedIssue)
   }).catch((err)=>{
     res.status(400).send("bad request")
