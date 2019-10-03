@@ -13,7 +13,11 @@ router.get("/getIssues",userValidate,(req,res)=>{
   var lowerLat = lat - rad/(111.7)
   var rightLng  = lng + rad/(111.321*Math.cos(lat*Math.PI/180)) // +- 180 degree overflow check
   var leftLng  = lng - rad/(111.321*Math.cos(lat*Math.PI/180))
-
+  issues.find({"location.lat":{$lt:upperLat,$gt:lowerLat}, "location.lng":{$lt:rightLng,$gt:leftLng}}).then((issueList)=>{
+    res.send(issueList)
+  }).catch((err)=>{
+    res.status(400).send("Bad Request")
+  })
 })
 router.get("/viewIssue/:issueId",userValidate,(req,res)=>{
   issues.findById(req.params.issueId).populate({path:"addedBy",select:"name"}).populate("residentComments.user","name").populate("authorityComments.user","name").exec((err,issue)=>{
