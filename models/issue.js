@@ -56,10 +56,11 @@ var mongoose = require('mongoose');
       },
       text:String
     }],
-    completionStatus:{
+    completionStatus:[{
       text:String,
-      status:Boolean
-    },
+      status:Boolean,
+      timestamp:Date
+    }],
     addedBy:{
       type:ObjectId,
       ref:'resident',

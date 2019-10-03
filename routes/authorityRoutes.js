@@ -14,7 +14,25 @@ router.get("/profile",authorityValidate,(req,res)=>{
   })
 })
 
-
+router.post("/claimIssue/:issueId",authorityValidate,(req,res)=>{
+  issues.findByIdAndUpdate(req.params.issueId,{$set:{assignedAuthority:req.body.authorityId}},{new:true}).then((updatedIssue)=>{
+    res.send(updatedIssue)
+  }).catch((err)=>{
+    res.status(400).send("bad request")
+  })
+})
+router.post("/updateStatus/:issueId",authorityValidate,(req,res)=>{
+  var newStatus = {
+    text:req.body.text,
+    status:req.body.status,
+    timestamp:Date.now()
+  }
+  issues.findOneAndUpdate({_id:req.params.issueId,assignedAuthority:req.body.authorityId},{$push:{completionStatus:newStatus}},{new:true}).then((updatedIssue)=>{
+    res.send(updatedIssue)
+  }).catch((err)=>{
+    res.status(400).send("Bad Request")
+  })
+})
 
 function authorityValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
