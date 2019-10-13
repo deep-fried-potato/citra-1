@@ -1,14 +1,11 @@
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
-  StatusBar,
   TextInput,
   Button,
-  Alert,  
 } from 'react-native';
 
 export default class Login extends React.Component{
@@ -21,7 +18,7 @@ export default class Login extends React.Component{
   }
   
   login = () => {
-    fetch('http://localhost:2000/login', {
+    fetch('http://172.18.0.1:3000/auth/residentLogin/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -32,12 +29,12 @@ export default class Login extends React.Component{
         password: this.state.password,
       }),
     })
-
-    .then((response) => response.json())
+    .then((response) => response.text())
     .then((resjson) => {
-      return resjson.loggedin
+      console.log(resjson)
+      return resjson
     })
-    .catch(err => (console.log(err)));
+    .catch(err => (console.log('Error', err)));
   }
 
   render(){

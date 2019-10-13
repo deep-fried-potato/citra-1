@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginScreen from './LoginScreen'
+import SignupScreen from './SignupScreen'
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,7 +14,10 @@ import {
 export default class WelcomeScreen extends React.Component{
     render(){
         return(
-            <LoginScreen />
+            <div>
+                <LoginScreen />
+                <SignupScreen />
+            </div>
         )
     }
 } 
