@@ -14,10 +14,10 @@ import {
 export default class WelcomeScreen extends React.Component{
     render(){
         return(
-            <div>
+            <View>
                 <LoginScreen />
                 <SignupScreen />
-            </div>
+            </View>
         )
     }
 } 
