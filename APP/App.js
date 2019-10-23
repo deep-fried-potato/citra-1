@@ -1,26 +1,12 @@
 import React from 'react';
 import WelcomeScreen from './Components/WelcomeScreen'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen : WelcomeScreen,
+  },
+})
 
-export default class App extends React.Component{
-  render(){
-    return(
-      <WelcomeScreen />
-    )
-  }
-}
+export default createAppContainer(AppNavigator);

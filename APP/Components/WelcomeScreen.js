@@ -1,23 +1,17 @@
 import React from 'react';
 import LoginScreen from './LoginScreen'
 import SignupScreen from './SignupScreen'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-
-export default class WelcomeScreen extends React.Component{
-    render(){
-        return(
-            <View>
-                <LoginScreen />
-                <SignupScreen />
-            </View>
-        )
+const welcomeNavigator = createStackNavigator({
+    Login: {
+        screen: LoginScreen,
+    },
+    SignUp: {
+        screen: SignupScreen
     }
-} 
+
+}) 
+
+export default createAppContainer(welcomeNavigator);
