@@ -67,13 +67,23 @@ var mongoose = require('mongoose');
       ref:'resident',
       required:true
     },
-    positiveVerifiers:[{
-      type:ObjectId,
-      ref:"resident"
+    positiveVerifications:[{
+      user:{
+        type:ObjectId,
+        ref:"resident"
+      },
+      photo:String
     }],
-    negativeVerifiers:[{
-      type:ObjectId,
-      ref:"resident"
-    }]
+    negativeVerifications:[{
+      user:{
+        type:ObjectId,
+        ref:"resident"
+      },
+      photo:String
+    }],
+    rewardCredits:{
+      amount:Number,
+      paymentId:String
+    }
   });
 module.exports = mongoose.model('issue',issueSchema)
