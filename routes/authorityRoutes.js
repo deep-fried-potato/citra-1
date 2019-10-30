@@ -76,7 +76,6 @@ router.post("/confirmPayment",(req,res)=>{
       console.log(err)
       res.status(500).send()
     })
-
   }
   else{
     res.status(403).send()

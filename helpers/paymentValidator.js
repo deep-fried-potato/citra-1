@@ -12,7 +12,7 @@ var paymentValidator = function(body){
   });
 
   var hash = hmacsha1(string.slice(0,-1),"8d2e7e1d19ef4066ba6509cdea480c8f");
-  if(hash.toString()==body.mac){
+  if((hash.toString()==body.mac) && (body.status=="Credit")){
     return true
   }
   else{

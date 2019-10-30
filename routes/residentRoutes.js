@@ -61,7 +61,40 @@ router.post("/deleteIssue/:issueId",residentValidate,(req,res)=>{
     res.status(500).send("DB error")
   })
 })
-
+router.post("/verifyIssue/:issueId",residentValidate,(req,res)=>{
+  newVerification = {
+    user:req.body.residentId,
+    photo:req.body.photo,
+    positive:req.body.positive
+  }
+  issues.findOneAndUpdate(
+    {
+      "_id":req.params.issueId,
+      "verifications.user":{"$nin":[req.body.residentId]},
+      "rewardCredits.amount":{"$gte":1}
+    },
+    {
+      "$push":{verifications:newVerification},
+      "$inc":{"rewardCredits.amount":-1}
+    },
+    {new:true}
+  ).then((issue)=>{
+    if(issue){
+      residents.findByIdAndUpdate(req.body.residentId,{"$inc":{rewardCredits:1}},{new:true}).then((resident)=>{
+        res.send(resident)
+      }).catch((err)=>{
+        console.log(err)
+        res.status(500).send("error")
+      })
+    }
+    else{
+      res.status(400).send("Bad request")
+    }
+  }).catch((err)=>{
+    console.log(err)
+    res.status(500).send("Error")
+  })
+})
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.residentId = id;

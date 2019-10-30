@@ -67,19 +67,13 @@ var mongoose = require('mongoose');
       ref:'resident',
       required:true
     },
-    positiveVerifications:[{
+    verifications:[{
       user:{
         type:ObjectId,
         ref:"resident"
       },
-      photo:String
-    }],
-    negativeVerifications:[{
-      user:{
-        type:ObjectId,
-        ref:"resident"
-      },
-      photo:String
+      photo:String,
+      positive:Boolean
     }],
     rewardCredits:{
       amount:Number,
