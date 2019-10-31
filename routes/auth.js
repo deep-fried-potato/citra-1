@@ -47,7 +47,8 @@ router.post("/registerAuthority",(req,res)=>{
     password: hashedPassword,
     registrationNumber:req.body.registrationNumber,
     typeOfAuthority:req.body.typeOfAuthority,
-    issuesAddressed:req.body.issuesAddressed
+    issuesAddressed:req.body.issuesAddressed,
+    location:req.body.location,
   })
   authority.save((err,newAuthority)=>{
     if(err){

@@ -95,6 +95,23 @@ router.post("/verifyIssue/:issueId",residentValidate,(req,res)=>{
     res.status(500).send("Error")
   })
 })
+
+router.get("/getAuthorities",residentValidate,(req,res)=>{
+  var rad = parseFloat(req.query.rad)
+  var lat = parseFloat(req.query.lat)
+  var lng = parseFloat(req.query.lng)
+  var upperLat = lat + rad/(111.7) //+- 90 degree latitude overflow dekhle bhai
+  var lowerLat = lat - rad/(111.7)
+  var rightLng  = lng + rad/(111.321*Math.cos(lat*Math.PI/180)) // +- 180 degree overflow check
+  var leftLng  = lng - rad/(111.321*Math.cos(lat*Math.PI/180))
+  //SELECT Only requied fields.: id , title, desc ,Type, tags
+  authorities.find({"location.lat":{$lt:upperLat,$gt:lowerLat}, "location.lng":{$lt:rightLng,$gt:leftLng}}).then((authorityList)=>{
+    res.send(authorityList)
+  }).catch((err)=>{
+    res.status(400).send("Bad Request")
+  })
+})
+
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.residentId = id;
