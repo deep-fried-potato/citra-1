@@ -23,6 +23,17 @@ router.post("/deleteProfile",residentValidate,(req,res)=>{
   })
 })
 
+router.put("/updateProfile",residentValidate,(req, res)=>{
+  delete req.body.update.rewardCredits;
+  delete req.body.update._emailVerified;
+  delete req.body.update._phoneVerified;
+  residents.findByIdAndUpdate(req.body.residentId, {$set: req.body.update},{new:true}).then((resident)=>{
+    res.send(resident)
+  }).catch((err)=>{
+    res.status(500).send(err)
+  })
+})
+
 router.post("/addIssue",residentValidate,(req,res)=>{
   axios.get(`https://plus.codes/api?address=${req.body.location.lat},${req.body.location.lng}&email=YOUR_EMAIL_HERE`).then((response)=>{
     issues.create({

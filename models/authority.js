@@ -29,8 +29,12 @@ var mongoose = require('mongoose');
     photo: String,
     plusCode: String,
     location:{
-      lat: Number,
-      lng: Number
+      lat: {
+        type:Number,
+      },
+      lng: {
+        type:Number,
+      }
     },
     typeOfAuthority:{
       type:String
