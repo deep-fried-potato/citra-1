@@ -14,16 +14,16 @@ import UserBookmarks from "../screens/profile/bookmarks";
 import UserActivity from "../screens/profile/activity";
 import UserEditProfile from "../screens/profile/editProfile";
 
-const Drawer = createDrawerNavigator({
-    UserBookmarks: {screen: UserBookmarks},
-    UserPosts:{screen:UserPosts},
-    UserSettings:{screen:UserSettings},
-    UserActivity:{screen:UserActivity},
-    UserEditProfile:{screen:UserEditProfile}
-});
+// const Drawer = createDrawerNavigator({
+//     UserBookmarks: {screen: UserBookmarks},
+//     UserPosts:{screen:UserPosts},
+//     UserSettings:{screen:UserSettings},
+//     UserActivity:{screen:UserActivity},
+//     UserEditProfile:{screen:UserEditProfile}
+// });
 
 const appNavigator = createStackNavigator({
-    Drawer:{screen:Drawer},
+    // Drawer:{screen:Drawer},
     Home: {screen: Home},
     Search: {screen: Search},
     PostCreate: {screen: PostCreate},
