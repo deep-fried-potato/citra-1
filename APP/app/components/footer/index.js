@@ -45,7 +45,7 @@ const postModalStack = createStackNavigator({
     mode:"modal",
 })
 
-const FooterNavigator = createBottomTabNavigator({
+export const FooterNavigator = createBottomTabNavigator({
     Home:{
         screen:Home,
         navigationOptions: {
@@ -114,6 +114,6 @@ const FooterNavigator = createBottomTabNavigator({
     }
 });
 
-const Footer = createAppContainer(FooterNavigator);
+// const Footer = createAppContainer(FooterNavigator);
 
-export default Footer;
+// export default Footer;

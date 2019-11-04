@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {ScrollView, View, Text, StyleSheet,Header, AsyncStorage} from 'react-native';
+import {ScrollView, View, Text, StyleSheet, AsyncStorage} from 'react-native';
 import {Container, Button, Content} from "native-base";
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+// import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Banner from '../../components/banner'
 import { Header } from 'react-navigation-stack';
@@ -77,19 +77,21 @@ class Home extends Component {
     render() {
         return (
             <Container>
-                <Header>
-                    <Button title="Sign Out" onPress={this._signOutAsync} />
-                    <Button title= "View Posts" onPress = {this._viewfeed} />
-                </Header>
                 <Container>
                     <Banner name="Home"/>
+                    <Button onPress={this._signOutAsync} >
+                        <Text>Sign Out</Text>
+                    </Button>
+                    <Button onPress = {this._viewfeed} >
+                        <Text>View Posts</Text>
+                    </Button>  
                     <View style={styles.container}>
-                        <MapView
+                        {/* <MapView
                             style={styles.map}
                             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                             region={this.state.region}
                         >
-                        </MapView>
+                        </MapView> */}
                     </View>
                     <View style={{flex: 1}}>
                         <Text style={styles.text}>Filter By Category</Text>
