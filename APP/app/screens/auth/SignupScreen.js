@@ -11,25 +11,25 @@ export default class LoginScreen extends React.Component{
     }
   }
 
-  login = () => {
-    fetch('http://172.18.0.1:3000/auth/residentLogin/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
-    .then((response) => response.text())
-    .then((resjson) => {
-      console.log(resjson)
-      return resjson
-    })
-    .catch(err => (console.log('Error', err)));
-  }
+  // login = () => {
+  //   fetch('http://172.18.0.1:3000/auth/residentLogin/', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type' : 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email: this.state.email,
+  //       password: this.state.password,
+  //     }),
+  //   })
+  //   .then((response) => response.text())
+  //   .then((resjson) => {
+  //     console.log(resjson)
+  //     return resjson
+  //   })
+  //   .catch(err => (console.log('Error', err)));
+  // }
 
   render(){
   return(
@@ -47,7 +47,8 @@ export default class LoginScreen extends React.Component{
             </Item>
               <Button 
               style = {styles.btn} 
-              onPress = {this.login}
+              // onPress = {this.login}
+              onPress={this._signUp}
               title = 'Register'
               />
           </Form>
@@ -61,6 +62,9 @@ export default class LoginScreen extends React.Component{
         </Footer>
       </Container>
   )
+  }
+  _signUp = () => {
+    // details -> signup -> validation  screen -> home 
   }
 }
 

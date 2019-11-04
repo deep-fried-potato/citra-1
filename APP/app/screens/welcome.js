@@ -1,3 +1,5 @@
+// Auth loading Screen
+
 import React from 'react';
 import {Text} from 'react-native';
 import {
@@ -9,7 +11,6 @@ import {
     Button,
     Title,
 } from 'native-base'
-import styles from './styles.js';
 
 class WelcomeScreen extends React.Component{
     render(){

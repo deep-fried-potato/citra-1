@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Button } from 'react-native'
+import {StyleSheet, Text, Button, AsyncStorage } from 'react-native'
 import { Container, Header, Content, Form, Item, Input,Footer, Label} from 'native-base';
 
 export default class LoginScreen extends React.Component{
@@ -11,25 +11,25 @@ export default class LoginScreen extends React.Component{
     }
   }
 
-  login = () => {
-    fetch('http://172.18.0.1:3000/auth/residentLogin/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
-    .then((response) => response.text())
-    .then((resjson) => {
-      console.log(resjson)
-      return resjson
-    })
-    .catch(err => (console.log('Error', err)));
-  }
+  // login = () => {
+  //   fetch('http://172.18.0.1:3000/auth/residentLogin/', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type' : 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email: this.state.email,
+  //       password: this.state.password,
+  //     }),
+  //   })
+  //   .then((response) => response.text())
+  //   .then((resjson) => {
+  //     console.log(resjson)
+  //     return resjson
+  //   })
+  //   .catch(err => (console.log('Error', err)));
+  // }
 
 
   render(){
@@ -53,9 +53,9 @@ export default class LoginScreen extends React.Component{
               />
             </Item>
               <Button 
-              style = {styles.btn} 
               // onPress = {this.login}
-              onPress = {() => window.alert(this.state.password)}
+              onPress = {this._signInAsync}
+              // onPress = {() => window.alert(this.state.password)}
               title = 'Sign In'
               />
           </Form>
@@ -70,11 +70,9 @@ export default class LoginScreen extends React.Component{
       </Container>
   )
   }
-}
 
-const styles = StyleSheet.create({
-  btn:{
-    textAlign : 'center',
-    color: 'red',
-  },
-})
+  _signInAsync = async () => {
+    await AsyncStorage.setItem('userToken', 'dummy');
+    this.props.navigation.navigate('App')
+  } 
+}
