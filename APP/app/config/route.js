@@ -1,22 +1,46 @@
 import React from 'react';
 import {createStackNavigator} from "react-navigation-stack";
 import {createAppContainer, createSwitchNavigator} from "react-navigation";
-// import { createDrawerNavigator } from 'react-navigation-drawer';
-import Feedscreen from '../screens/Post/feed'
-import Postscreen from '../screens/Post/postDetail'
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+import Feedscreen from '../screens/Post/feed'
 import LoginScreen from "../screens/auth/LoginScreen"
 import SignupScreen from "../screens/auth/SignupScreen"
 import Authloadingscreen from "../screens/Authloading"
 import ForgotauthScreen from "../screens/forgotauth"
 import {FooterNavigator} from "../components/footer/index"
-import {PostScreenNavigator} from "../components/PostFooter/index"
+import PostDetail from '../screens/Post/postDetail';
+import PostMedia from '../screens/Post/postMedia'
+
+const postDetailNavigator = createMaterialBottomTabNavigator({
+    Details: {
+        screen: PostDetail,
+        navigationOptions:{
+            tabBarIcon: ({focused}) =><Icon name="bars" size={20} color={'#DACE91'}/>,
+        },
+    },
+    Media: {
+        screen: PostMedia,
+        navigationOptions:{
+            tabBarIcon: ({focused}) =><Icon name="bars" size={20} color={'#DACE91'}/>,
+        },
+    }
+},
+{
+    initialRouteName:'Details',
+    activeColor: '#f0edf6',
+    inactiveColor: '#3e2465',
+    shifting: false,
+    labeled: true,
+    barStyle: { backgroundColor: '#694fad' },
+});
+
 const appNavigator = createStackNavigator({
-    // Drawer:{screen:Drawer},
-    PostScreenNavigator,
     FooterNavigator,
+    postDetailNavigator,
     feedscreen: {screen: Feedscreen},
-    postscreen: {screen: Postscreen},
+    // postscreen: {screen: Postscreen},
 }, {
     defaultNavigationOptions: {
         header: null,
