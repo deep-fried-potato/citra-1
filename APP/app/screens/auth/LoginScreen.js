@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, Button, AsyncStorage } from 'react-native'
-import { Container, Header, Content, Form, Item, Input,Footer, Label} from 'native-base';
+import { Container, Header, Content, Form, Item, Input,Footer, Label, Card,CardItem} from 'native-base';
 
 export default class LoginScreen extends React.Component{
   constructor(props){
@@ -11,7 +11,7 @@ export default class LoginScreen extends React.Component{
     }
   }
 
-  // login = () => {
+  // login = () => { 
   //   fetch('http://172.18.0.1:3000/auth/residentLogin/', {
   //     method: 'POST',
   //     headers: {
@@ -59,6 +59,14 @@ export default class LoginScreen extends React.Component{
               title = 'Sign In'
               />
           </Form>
+          <Card>
+            <CardItem>
+              <Button 
+                title='forgot Password?'
+                onPress={ () => {this.props.navigation.navigate('forgotauth')} }
+              />
+            </CardItem>
+          </Card>
         </Content>
         <Footer>
           <Text>Don't have a Citra account?</Text>

@@ -64,8 +64,11 @@ export default class LoginScreen extends React.Component{
   )
   }
   _signUp = () => {
-    // details -> signup -> validation  screen -> home 
-  }
+    // redirect to login
+    // validation via email
+    alert('Verify your account. Check your inbox for more info');
+    this.props.navigation.navigate('loginscreen');
+}
 }
 
 const styles = StyleSheet.create({

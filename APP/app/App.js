@@ -4,6 +4,7 @@ import { createStackNavigator} from 'react-navigation-stack';
 import LoginScreen from "./screens/auth/LoginScreen"
 import SignupScreen from "./screens/auth/SignupScreen"
 import Authloadingscreen from "./screens/Authloading"
+import ForgotauthScreen from "./screens/forgotauth"
 import Homescreen from './screens/home'
 
 const appStack = createStackNavigator({
@@ -16,6 +17,7 @@ const appStack = createStackNavigator({
 const authStack = createSwitchNavigator({
     loginscreen: {screen: LoginScreen},
     signupscreen: {screen: SignupScreen},
+    forgotauth: {screen: ForgotauthScreen},
 },{
     initialRouteName: 'loginscreen',
     headerMode : 'none'
@@ -29,3 +31,9 @@ export default createAppContainer(createSwitchNavigator({
     initialRouteName: 'Authloading',
 }
 ));
+
+//TODO-
+// Form validation;
+// signup validation
+// styling
+// integrate
