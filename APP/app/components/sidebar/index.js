@@ -1,79 +1,28 @@
-import React, {Component} from 'react';
-import {Content, Text, List, ListItem, Icon, Container, Left, Thumbnail} from "native-base";
-import styles from './style'
+import React from "react"
+import sidebarContent from "./sidebarContent";
+import { createAppContainer } from 'react-navigation';
+import {createDrawerNavigator} from "react-navigation-drawer";
 
-const data = [
-    {
-        name: "Bookmarks",
-        route: "userbookmarks",
-        icon: "phone-portrait",
-        bg: "#C5F442"
-    },
-    {
-        name: "Posts",
-        route: "posts",
-        icon: "arrow-up",
-        bg: "#477EEA",
-    },
-    {
-        name: "Activity",
-        route: "activity",
-        icon: "arrow-down",
-        bg: "#DA4437",
-    },
-    {
-        name: "Settings",
-        route: "settings",
-        icon: "repeat",
-        bg: "#C5F442",
-    },
-]
+import Activity from "../../screens/profile/activity";
+import Bookmarks from "../../screens/profile/bookmarks";
+import PostList from "../../screens/profile/postList";
+import Settings from "../../screens/profile/settings";
+import EditProfile from "../../screens/profile/editProfile";
 
-const profileImage = require("../../assets/profile.png")
-
-class Sidebar extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            shadowOffsetWidth: 1,
-            shadowRadius: 4
-        }
+const drawer = createDrawerNavigator({
+    Activity:{screen:Activity},
+    Bookmarks:{screen:Bookmarks},
+    Posts:{screen:PostList},
+    Settings:{screen:Settings},
+    Edit:{screen:EditProfile}
+},{
+    // initialRouteName:'Activity',
+    contentComponent:sidebarContent,
+    contentOptions:{
+        activeTintColor: '#000000',
+        activeBackgroundColor: '#e6e6e6',
     }
+});
 
-    render() {
-        return (
-            <Container>
-                <Content
-                    bounces={false}
-                    style={{flex: 1, backgroundColor: '#fff', top: -1}}>
-                    <Thumbnail large source={{uri: profileImage}}/>
-                    <Text style={{fontSize:12}} >Vineet Sharma</Text>
-                    <Text style={{fontSize:6}}>Edit Profile</Text>
-                    <View
-                        style={{
-                            borderBottomColor: 'black',
-                            borderBottomWidth: 1,
-                        }}
-                    />
-                    <List
-                        dataArray={data}
-                        renderRow={data => <ListItem
-                            button
-                            noBorder
-                            onPress={() => this.props.navigation.navigate(data.route)}>
-                            <Left>
-                                <Icon
-                                    active
-                                    name={data.icon}
-                                    style={{color: '#777', fontSize: 26, width: 30}}/>
-                                <Text style={styles.text}>{data.name}</Text>
-                            </Left>
-                        </ListItem>}
-                    />
-                </Content>
-            </Container>
-        );
-    }
-}
-
-export default Sidebar;
+const Sidebar = createAppContainer(drawer);
+export default Sidebar
