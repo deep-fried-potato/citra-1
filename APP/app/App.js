@@ -1,12 +1,11 @@
 import React from "react";
-import AppContainer from "./config/route";
+
+import Footer from "./components/footer";
+import Sidebar from "./components/sidebar";
 import {Root} from "native-base";
-import FooterNav from "./components/footerNav";
-import SideNav from "./components/sideNav";
+
 
 export default () =>
     <Root>
-        {/*<SideNav/>*/}
-        <AppContainer/>
-        <FooterNav/>
+        <Footer/>
     </Root>
