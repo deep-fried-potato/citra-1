@@ -8,6 +8,7 @@ export default class LoginScreen extends React.Component{
     this.state = {
         email : '',
         password:'',
+        password2 : '',
     }
   }
 
@@ -38,12 +39,25 @@ export default class LoginScreen extends React.Component{
         <Content>
           <Form>
             <Item floatingLabel>
-              <Label>Username</Label>
-              <Input />
+              <Label>Email</Label>
+              <Input 
+              onChangeText = {text => this.setState({'email':text})}
+              value = {this.state.email}
+              />
             </Item>
             <Item floatingLabel last>
               <Label>Password</Label>
-              <Input />
+              <Input 
+              onChangeText = {text => this.setState({'password':text})}
+              value = {this.state.password}
+              />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Confirm Password</Label>
+              <Input 
+              onChangeText = {text => this.setState({'password2':text})}
+              value = {this.state.password2}
+              />
             </Item>
               <Button 
               style = {styles.btn} 
@@ -64,10 +78,19 @@ export default class LoginScreen extends React.Component{
   )
   }
   _signUp = () => {
+    
+    if (this.state.password !== this.state.password2){
+      alert(`Passwords don't match`);
+      this.setState({'password':'', 'password2':''});
+    }
+    else{
     // redirect to login
     // validation via email
-    alert('Verify your account. Check your inbox for more info');
-    this.props.navigation.navigate('loginscreen');
+      alert('Verify your account. Check your inbox for more info');
+      this.props.navigation.navigate('loginscreen');
+    }
+    
+    
 }
 }
 
