@@ -10,28 +10,6 @@ export default class LoginScreen extends React.Component{
         password:'',
     }
   }
-
-  // login = () => { 
-  //   fetch('http://172.18.0.1:3000/auth/residentLogin/', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type' : 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email: this.state.email,
-  //       password: this.state.password,
-  //     }),
-  //   })
-  //   .then((response) => response.text())
-  //   .then((resjson) => {
-  //     console.log(resjson)
-  //     return resjson
-  //   })
-  //   .catch(err => (console.log('Error', err)));
-  // }
-
-
   render(){
   return(
       <Container>
@@ -79,8 +57,30 @@ export default class LoginScreen extends React.Component{
   )
   }
 
-  _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'dummy');
-    this.props.navigation.navigate('App')
+  _signInAsync = () => {
+    fetch('http://139.59.75.22:3000/auth/residentLogin', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password,
+      }),
+    })
+    .then((response) => response.json())
+    .then(async (resjson) => {
+      console.log(resjson)
+      if (resjson.token){
+        await AsyncStorage.setItem('userToken', resjson.token);
+        this.props.navigation.navigate('App')
+      }
+      else{
+        alert('Invalid Credentials');
+      }
+    })
+    .catch(err => (console.log('Error', err)));
+
   } 
 }

@@ -5,7 +5,8 @@ class Home extends Component {
         return (
             <View>
                 <Text>Home screen</Text>
-                <Button title="Sign Out" onPress={this._signOutAsync} /> 
+                <Button title="Sign Out" onPress={this._signOutAsync} />
+                <Button title= "View Posts" onPress = {this._viewfeed} />
             </View>
         );
     }
@@ -13,6 +14,9 @@ class Home extends Component {
     _signOutAsync = async () => {
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
+    }
+    _viewfeed = () => {
+        this.props.navigation.navigate('feedscreen');
     }
 }
 

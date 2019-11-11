@@ -6,9 +6,14 @@ import SignupScreen from "./screens/auth/SignupScreen"
 import Authloadingscreen from "./screens/Authloading"
 import ForgotauthScreen from "./screens/forgotauth"
 import Homescreen from './screens/home'
+import Feedscreen from './screens/feed'
+import Postscreen from './screens/postDetail'
+
 
 const appStack = createStackNavigator({
-    homescreen : {screen: Homescreen}
+    homescreen : {screen: Homescreen},
+    feedscreen: {screen: Feedscreen},
+    postscreen: {screen: Postscreen},
 },{
     headerMode : 'none'
 })
