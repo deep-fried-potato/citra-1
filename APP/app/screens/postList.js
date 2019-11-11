@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {View, Text} from "react-native";
 
-class PostList extends Component {
+class Posts extends Component {
     render() {
         return (
             <View>
-                <Text>Post list here !!!!!</Text>
+                <Text>Main Post here !!!!!</Text>
             </View>
         );
     }
 }
 
-export default PostList;
+export default Posts;
