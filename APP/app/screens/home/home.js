@@ -1,44 +1,46 @@
 import React, {Component} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {Container, Button, Content} from "native-base";
-import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import Banner from '../components/banner'
+import Banner from '../../components/banner'
 
 const styles = StyleSheet.create({
-    text: {fontSize: 16, color: 'blue', paddingLeft: 10, paddingTop: 5, fontWeight: 'bold'},
+    text: {fontSize: 16, color: 'rgb(100,100,100)', paddingLeft: 10, paddingTop: 5},
     circleShapeView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         width: 90,
         height: 90,
         borderRadius: 90 / 2,
-        backgroundColor: '#00BCD4',
+        backgroundColor: '#00f',
         margin: 10,
-        justifyContent: 'center'
     },
+    iconName:{color: 'white'}
 })
 
-const icons = ['md-flame', 'md-pint', 'md-water', 'md-bug']
+const icons = [
+        {name:'Fire', icon:'md-flame'},
+        {name:'Garbage', icon:'md-pint'},
+        {name:'Water', icon:'md-water'},
+        {name:'Pests', icon:'md-bug'}
+    ];
 
 class Home extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-    }
-
-    static navigationOptions = {
-        title: 'Citra',
-        tabBarLabel: "Home",
-        tabBarIcon: ({tintColor}) => (
-            <Entypo color={tintColor} size={30} name="home"></Entypo>
-        )
     }
 
     render() {
         return (
             <Container>
-                <Banner name="Home" />
-                <View style={{flex: 3, backgroundColor: 'white' +
-                        ''}}>
+                <Banner name="Home"/>
+                <View style={{
+                    flex: 3, backgroundColor: 'white' +
+                        ''
+                }}>
                     <Text>Home here ....</Text>
                 </View>
                 <View style={{flex: 1}}>
@@ -47,7 +49,8 @@ class Home extends Component {
                         {
                             icons.map((object, i) => (
                                 <Button key={i} style={styles.circleShapeView}>
-                                    <Ionicon color="#fff" size={35} name={object}></Ionicon>
+                                    <Ionicon color="#fff" size={35} name={object.icon}/>
+                                    <Text style={styles.iconName}>{object.name}</Text>
                                 </Button>)
                             )
                         }
