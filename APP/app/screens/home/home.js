@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
-import {Container, Button} from "native-base";
+import {Container, Button, Content} from "native-base";
+import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Banner from '../components/banner'
 
 const styles = StyleSheet.create({
     text: {fontSize: 16, color: 'blue', paddingLeft: 10, paddingTop: 5, fontWeight: 'bold'},
@@ -18,13 +20,30 @@ const styles = StyleSheet.create({
 const icons = ['md-flame', 'md-pint', 'md-water', 'md-bug']
 
 class Home extends Component {
+
+    constructor(props){
+        super(props);
+    }
+
+    static navigationOptions = {
+        title: 'Citra',
+        tabBarLabel: "Home",
+        tabBarIcon: ({tintColor}) => (
+            <Entypo color={tintColor} size={30} name="home"></Entypo>
+        )
+    }
+
     render() {
         return (
             <Container>
-                <View style={{flex: 3, backgroundColor: 'red'}}></View>
+                <Banner name="Home" />
+                <View style={{flex: 3, backgroundColor: 'white' +
+                        ''}}>
+                    <Text>Home here ....</Text>
+                </View>
                 <View style={{flex: 1}}>
                     <Text style={styles.text}>Filter By Category</Text>
-                    <ScrollView horizontal={true}>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                         {
                             icons.map((object, i) => (
                                 <Button key={i} style={styles.circleShapeView}>
@@ -34,6 +53,7 @@ class Home extends Component {
                         }
                     </ScrollView>
                 </View>
+
             </Container>
         );
     }
