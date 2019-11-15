@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {createAppContainer} from "react-navigation";
 import {createBottomTabNavigator} from "react-navigation-tabs";
 import {createStackNavigator} from "react-navigation-stack";
+import TabBarComponent from "./footer";
 import Icon from "react-native-vector-icons/Feather";
 import Home from "../../screens/home/home";
 import Search from "../../screens/search/search";
@@ -13,6 +14,7 @@ import {StyleSheet, TouchableOpacity} from "react-native";
 
 const styles = StyleSheet.create({
     banner:{backgroundColor:'white'},
+    btn:{backgroundColor:'blue'}
 });
 
 const icon = (iconName, color) =>(<Icon color={color} size={30} name={iconName}></Icon>);
@@ -28,7 +30,7 @@ const postModalStack = createStackNavigator({
                     </Left>
                     <Body/>
                     <Right>
-                        <Button rounded primary small>
+                        <Button style={styles.btn} rounded small>
                             <Text>Post</Text>
                         </Button>
                     </Right>
@@ -90,6 +92,7 @@ const FooterNavigator = createBottomTabNavigator({
         }
     }
 },{
+    tabBarComponent:TabBarComponent,
     tabBarOptions: {
         activeTintColor: 'blue',
         labelStyle: {
