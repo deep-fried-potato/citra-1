@@ -92,11 +92,6 @@ class PostCreate extends Component {
                                     <Icon style={styles.iconStyle} size={30} color="#000" name='image'></Icon>
                                 </TouchableOpacity>
                             </Col>
-                            <Col style={styles.icon}>
-                                <TouchableOpacity>
-                                    <Icon style={styles.iconStyle} size={30} color="#000" name='map-pin'></Icon>
-                                </TouchableOpacity>
-                            </Col>
                         </Grid>
                     </Footer>
                 </View>
