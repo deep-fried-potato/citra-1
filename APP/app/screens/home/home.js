@@ -2,9 +2,19 @@ import React, {Component} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {Container, Button, Content} from "native-base";
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 import Banner from '../../components/banner'
 
 const styles = StyleSheet.create({
+    container: {
+        flex:3,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
     text: {fontSize: 16, color: 'rgb(100,100,100)', paddingLeft: 10, paddingTop: 5},
     circleShapeView: {
         flex: 1,
@@ -18,7 +28,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     iconName:{color: 'white'}
-})
+});
 
 const icons = [
         {name:'Fire', icon:'md-flame'},
@@ -31,17 +41,45 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            region:null,
+            markers:null,
+            error:null
+        }
+    }
+
+    onRegionChange(region) {
+        this.setState({region});
+    }
+
+    componentDidMount(): void {
+        Geolocation.getCurrentPosition(position => {
+            this.setState({
+                region:{
+                    latitude:position.coords.latitude,
+                    longitude:position.coords.longitude,
+                    latitudeDelta:0.0922,
+                    longitudeDelta:0.0421
+                },
+                error:null
+            });
+        },
+            (error) => this.setState({error:error.message})),
+            {enableHighAccuracy: true, timeout: 200000, maximumAge: 0}
     }
 
     render() {
         return (
             <Container>
                 <Banner name="Home"/>
-                <View style={{
-                    flex: 3, backgroundColor: 'white' +
-                        ''
-                }}>
-                    <Text>Home here ....</Text>
+                <View style={styles.container}>
+                    <MapView
+                        style={styles.map}
+                        provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                        region={this.state.region}
+                        onRegionChange={this.onRegionChange}
+                    >
+                    </MapView>
                 </View>
                 <View style={{flex: 1}}>
                     <Text style={styles.text}>Filter By Category</Text>
