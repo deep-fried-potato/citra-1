@@ -48,10 +48,6 @@ class Home extends Component {
         }
     }
 
-    onRegionChange(region) {
-        this.setState({region});
-    }
-
     componentDidMount(): void {
         Geolocation.getCurrentPosition(position => {
             this.setState({
@@ -77,7 +73,6 @@ class Home extends Component {
                         style={styles.map}
                         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                         region={this.state.region}
-                        onRegionChange={this.onRegionChange}
                     >
                     </MapView>
                 </View>
