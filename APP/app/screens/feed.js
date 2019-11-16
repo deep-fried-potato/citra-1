@@ -1,53 +1,65 @@
 import React from 'react';
-import {FlatList,  AsyncStorage} from 'react-native';
+import {FlatList,  AsyncStorage, PermissionsAndroid} from 'react-native';
 import {Card, Text,CardItem, Left, Right, Icon, Button,Thumbnail, Body} from 'native-base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-// const axios = require('axios').default;
 
+class Item extends React.Component{
 
-const DATA = [
-    {
-        id:'1',
-        title:'Why so serious?',
-        content : 'Like any other social media site Facebook has length requirements when it comes to writing on the wall.',
-        tags:['Zuora', 'Subscription', 'Startup', 'Entrepreneurship' ,'Sales' ,'Marketing' ,'Pitching']
-    },
-    {
-        id:'2',
-        title:'Why so serious?',
-        content : 'Like any other social media site Facebook has length requirements when it comes to writing on the wall.',
-        tags:['Zuora', 'Subscription', 'Startup', 'Entrepreneurship' ,'Sales' ,'Marketing' ,'Pitching']
-    },
-    {
-        id:'3',
-        title:'Why so serious?',
-        content : 'Like any other social media site Facebook has length requirements when it comes to writing on the wall.',
-        tags:['Zuora', 'Subscription', 'Startup', 'Entrepreneurship' ,'Sales' ,'Marketing' ,'Pitching']
-    },
-];
+    constructor(props){
+        super(props)
+        this.state = {
+            time: null,
+            distance: null
+        }
+    }
 
-function Item ({card, postpage} ) {
+    diff_days = (dt2, dt1) => {
+     let diff =(dt2.getTime() - dt1.getTime()) / 1000;
+     if ((diff /= 60) <= 59){ return `${Math.abs(Math.round(diff))} m`} // minutes
+     else if ((diff /= 60) <= 23) {return `${Math.abs(Math.round(diff))} h`}// hours
+     else{ 
+            diff /= 24;
+            return `${Math.abs(Math.round(diff))} d`
+        }
+    }
+
+    _parseDate = () => {
+        let time = new Date(this.props.card.addedDate);
+        let time_now = new Date();
+        this.setState({time:this.diff_days(time_now, time)});
+    }
+
+    _parseDistance = () => {
+
+    }
+
+    componentDidMount = () => {
+        this._parseDate();
+        this._parseDistance();
+    }
+
+    render(){
     return (
         <Card>
                 <CardItem >
                     <Left>
-                        {/* icon for differnt tags like potholes gaerbage etc */}
+                        {/* icon for differnt tags like potholes garbage etc */}
                         <Thumbnail source={require('../assets/drawer-cover.png')} />
                         <Body>
-                            <Text>{card.tags[0]}</Text>
-                            <Text note> Posted by {card.author} | {card.time} ago </Text>
+                            <Text>{this.props.card.typeOfIssue}</Text>
+                            <Text note> Posted by {this.props.card.addedBy} | {this.state.time} days ago </Text>
                             {/* <Text note> {card.tags.map(tag => { `<li> #${tag}</li>` })} </Text> */}
                         </Body>
                     </Left> 
                 </CardItem>
-                <TouchableOpacity onPress={() => postpage(card.id)}>
+                <TouchableOpacity onPress={() => this.props.postpage(this.props.card._id)}>
                     <CardItem cardBody>
                         {/* <Image source={require('../assets/drawer-cover.png')}  style={{height: 200, width: null, flex:1}} /> */}
                         <Body>
-                            <Text>{card.title}</Text>
-                            <Text note>{card.content}</Text>
+                            <Text>{this.props.card.title}</Text>
+                            <Text note>{this.props.card.description}</Text>
                             {/* content max 100 chars */}
                         </Body>
                     </CardItem>
@@ -56,13 +68,13 @@ function Item ({card, postpage} ) {
                     <Left>
                         <Button transparent>
                             <Icon active name="thumbs-up" />
-                            <Text>{card.upvotes|| 12}</Text>
+                            <Text>{this.props.card.upvotes.length}</Text>
                         </Button>
                     </Left>
                     <Body>
                         <Button transparent>
                             <Icon active name="chatbubbles" />
-                            <Text>{card.countcomments || 4}</Text>
+                            <Text>{this.props.card.residentComments.length + this.props.card.authorityComments.length}</Text>
                         </Button>
                      </Body>
                     <Right>
@@ -76,6 +88,7 @@ function Item ({card, postpage} ) {
         </Card>
       );    
 }
+}
 
 
 class feed extends React.Component{
@@ -83,7 +96,12 @@ class feed extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            feed : []
+            feed : [],
+            lat: null,
+            lng: null,
+            rad: 5,
+            refreshing: true,
+            location: null,
         }
     }
 
@@ -91,37 +109,80 @@ class feed extends React.Component{
         this.props.navigation.navigate('postscreen', {postid : id});
     }
 
-    fetchfeed = async () => {
+    _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
+        console.info(this.state)
         axios.get('http://139.59.75.22:3000/common/getIssues', {
             params:{
-                lat: 17.399320,
-                lng: 78.521402,
-                rad: 5,
+                lat: this.state.lat,
+                lng: this.state.lng,
+                rad: this.state.rad,
             },
             headers: {
-                'x-access-token': userToken,
+                'x-access-token': userToken, 
             }
         })
-        .then((res) =>{
-            console.log(res);
+        .then(resjson => {
+            // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
+            //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
+            this.setState({feed: Object.values(resjson.data) , refreshing: false})
         })
-        .catch(err => {console.log(err)}) 
+        .catch(err => {
+            console.log(err)
+            this.setState({refreshing:false})
+        }) 
     }
 
-    componentDidMount = () => {
-        this.fetchfeed();
+    _getCurrentPositionAsync = () => {
+        return new Promise(function (resolve, reject) {
+            Geolocation.getCurrentPosition(resolve, reject);
+        }).then((position) => {
+            return position;
+        })
+        .catch((err) => { 
+            console.log(err);
+        });
+    } 
+
+    _getCurrentLocation2 = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+            //TODO: onrefresh location update
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You are asasd accessing the location');
+                let position = await this._getCurrentPositionAsync();
+                this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude}) 
+                console.log(this.state);
+            } else {
+              console.log('Location permission denied');
+            }
+          } catch (err) {
+            console.warn(err);
+          }
+    }
+
+    componentDidMount = async () => {
+        await this._getCurrentLocation2();
+        await this._fetchfeed()
+    }
+
+    handlerefresh =() => {
+        this.setState({refreshing : true}, () => this._fetchfeed())
     }
 
     render(){
         return(
             <FlatList 
-                data = {DATA}
+                data = {this.state.feed}
                 renderItem = {({item}) => <Item card = {item} postpage = {this._postpage} />}
-                keyExtractor = {item => item.id} 
+                keyExtractor = {item => item._id}
+                refreshing = {this.state.refreshing}
+                onRefresh = {this.handlerefresh}
             /> 
         );
     }
 }
 
 export default feed;
+
+

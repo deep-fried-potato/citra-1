@@ -62,7 +62,7 @@ export default class LoginScreen extends React.Component{
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type' : 'application/json',
+       'Content-Type' : 'application/json',
       },
       body: JSON.stringify({
         email: this.state.email,
@@ -82,5 +82,5 @@ export default class LoginScreen extends React.Component{
     })
     .catch(err => (console.log('Error', err)));
 
-  } 
+  }
 }
