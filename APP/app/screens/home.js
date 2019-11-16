@@ -15,8 +15,9 @@ class Home extends Component {
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     }
-    _viewfeed = () => {
-        this.props.navigation.navigate('feedscreen');
+    _viewfeed = async () => {
+        let token = await AsyncStorage.getItem('userToken');
+        await this.props.navigation.navigate('feedscreen',{token: token});
     }
 }
 

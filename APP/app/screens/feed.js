@@ -11,7 +11,9 @@ class Item extends React.Component{
         super(props)
         this.state = {
             time: null,
-            distance: null
+            distance: null,
+            upvote: false,
+            total_upvote: null,
         }
     }
 
@@ -32,12 +34,44 @@ class Item extends React.Component{
     }
 
     _parseDistance = () => {
+        //TODO: Correct this function
+        let distance = Math.sqrt(Math.pow((this.props.latitude - this.props.card.location.lat),2)
+                         + Math.pow((this.props.longitude - this.props.card.location.lng),2))
+        distance = Math.round(distance);
+        this.setState({distance});
+    }
 
+    _getUser = (id) => {
+        //TODO: /getresident API update
+        return id;
+    }
+    _upvote = () => {
+        //TODO: Clever way to register upvotes
+        if (!this.state.upvote){
+            fetch(`http://139.59.75.22:3000/resident/upvoteIssue/:${this.props.card._id}`,{
+                method: 'POST',
+                headers: { 
+                    Accept: 'application/json',
+                    'Content-Type' : 'application/json',
+                    'x-access-token': this.props.token
+                }
+                })
+                .then(response => response.json())
+                .then((resjson) => {
+                    this.setState({'upvote' : true, 'total_upvote': this.state.total_upvote+1});
+                    // console.log(resjson)
+                })
+                .catch(err => (console.log('Error', err)));
+        }
+        else{
+            console.log('Already upvoted');
+        }
     }
 
     componentDidMount = () => {
         this._parseDate();
         this._parseDistance();
+        this.setState({'total_upvote':this.props.card.upvotes.length})
     }
 
     render(){
@@ -49,7 +83,7 @@ class Item extends React.Component{
                         <Thumbnail source={require('../assets/drawer-cover.png')} />
                         <Body>
                             <Text>{this.props.card.typeOfIssue}</Text>
-                            <Text note> Posted by {this.props.card.addedBy} | {this.state.time} days ago </Text>
+                            <Text note> Posted by {this._getUser(this.props.card.addedBy)} | {this.state.time} ago </Text>
                             {/* <Text note> {card.tags.map(tag => { `<li> #${tag}</li>` })} </Text> */}
                         </Body>
                     </Left> 
@@ -66,9 +100,9 @@ class Item extends React.Component{
                 </TouchableOpacity>
                 <CardItem footer>
                     <Left>
-                        <Button transparent>
+                        <Button  onPress={() => this._upvote()}>
                             <Icon active name="thumbs-up" />
-                            <Text>{this.props.card.upvotes.length}</Text>
+                            <Text>{this.state.total_upvote}</Text>
                         </Button>
                     </Left>
                     <Body>
@@ -78,10 +112,10 @@ class Item extends React.Component{
                         </Button>
                      </Body>
                     <Right>
-                        <Button transparent>
-                            <Text>2.4 Km away</Text>
+                        <Button transparent >
+                            <Text>{this.state.distance} Km away</Text>
+
                         </Button>
-                        
                     </Right>
  
                 </CardItem>
@@ -101,7 +135,6 @@ class feed extends React.Component{
             lng: null,
             rad: 5,
             refreshing: true,
-            location: null,
         }
     }
 
@@ -111,11 +144,12 @@ class feed extends React.Component{
 
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
-        console.info(this.state)
         axios.get('http://139.59.75.22:3000/common/getIssues', {
             params:{
-                lat: this.state.lat,
-                lng: this.state.lng,
+                // lat: this.state.lat || 17.399320,
+                // lng: this.state.lng || 78.521402,
+                lat: 17.399320,
+                lng: 78.521402,
                 rad: this.state.rad,
             },
             headers: {
@@ -126,11 +160,12 @@ class feed extends React.Component{
             // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
             //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
             this.setState({feed: Object.values(resjson.data) , refreshing: false})
+            // console.info(this.state.feed[0])
         })
         .catch(err => {
             console.log(err)
             this.setState({refreshing:false})
-        }) 
+        })
     }
 
     _getCurrentPositionAsync = () => {
@@ -151,8 +186,7 @@ class feed extends React.Component{
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('You are asasd accessing the location');
                 let position = await this._getCurrentPositionAsync();
-                this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude}) 
-                console.log(this.state);
+                this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude})
             } else {
               console.log('Location permission denied');
             }
@@ -174,7 +208,8 @@ class feed extends React.Component{
         return(
             <FlatList 
                 data = {this.state.feed}
-                renderItem = {({item}) => <Item card = {item} postpage = {this._postpage} />}
+                renderItem = {({item}) => <Item card = {item} postpage = {this._postpage} 
+                                latitude={this.state.lat} longitude={this.state.lng} token={this.props.navigation.getParam('token')} />}
                 keyExtractor = {item => item._id}
                 refreshing = {this.state.refreshing}
                 onRefresh = {this.handlerefresh}
