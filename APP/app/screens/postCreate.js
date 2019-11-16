@@ -79,9 +79,9 @@ class PostCreate extends Component {
                     <Form>
                         <Item stackedLabel>
                             <Label>Issue Title</Label>
-                            <Input />
+                            <Input autoFocus />
                         </Item>
-                        <Textarea autoFocus style={{marginHorizontal:10}} rowSpan={this.state.media? 13:this.state.inputRows}
+                        <Textarea style={{marginHorizontal:10}} rowSpan={this.state.media? 13:this.state.inputRows}
                                   placeholder="What issue are you facing?"/>
                     </Form>
                     {this.state.media && (
