@@ -49,16 +49,22 @@ function userValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.userId = id;
     residents.findById(id).then((resident)=>{
-      if(resident) req.body.isResident = true;
+      if(resident) {
+        if (!resident._emailVerified) res.status(403).send("Email not verified")
+        req.body.isResident = true;
+        next();
+      }
       else req.body.isResident = false;
-      next();
     }).catch((err)=>{
       res.status(500).send("DB Error")
     })
+    if (!req.body.isResident){
+      authorities.findById(id).then((authority)=>{
+        if (!authority._emailVerified) res.status(403).send("Email not verified")
+      })
+    }
 
-  }).catch((err)=>{
-    res.status(403).send("Token Error")
-  })
+  }).catch((err)=>{ res.status(403).send("Token Error") })
 
 }
 

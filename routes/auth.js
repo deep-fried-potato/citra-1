@@ -16,9 +16,7 @@ router.post("/registerResident",(req,res)=>{
     password: hashedPassword
   })
   resident.save((err,newResident)=>{
-    if(err){
-      res.status(409).send(err)
-    }
+    if(err) res.status(409).send(err)
     else{
       var token = jwt.sign({ id: newResident._id}, config.secret, {expiresIn: 86400});
       var mailOptions = {
@@ -28,11 +26,8 @@ router.post("/registerResident",(req,res)=>{
         text: 'Your verification code is ' + newResident._id
       };
       mailer.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
+        if (error) console.log(error);
+        else console.log('Email sent: ' + info.response);
       });
       res.send([newResident,{"token":token}])
     }
@@ -51,9 +46,7 @@ router.post("/registerAuthority",(req,res)=>{
     location:req.body.location,
   })
   authority.save((err,newAuthority)=>{
-    if(err){
-      res.status(409).send(err)
-    }
+    if(err) res.status(409).send(err)
     else{
       var token = jwt.sign({ id: newAuthority._id}, config.secret, {expiresIn: 86400 });
       var mailOptions = {
@@ -76,52 +69,36 @@ router.post("/registerAuthority",(req,res)=>{
 
 router.post("/residentLogin",(req,res)=>{
   residents.findOne({email:req.body.email},(err,resident)=>{
-    if(err){
-      res.status(500).send("There has been an error")
-    }
-    else if(resident == null){
-      res.status(404).send("No account with given credentials exists")
-    }
+    if(err) res.status(500).send("There has been an error")
+    else if(resident == null) res.status(404).send("No account with given credentials exists")
     else{
       if(bcrypt.compareSync(req.body.password,resident.password)){
         var token = jwt.sign({ id: resident._id }, config.secret, { expiresIn: 86400 });
         res.send({"token":token})
       }
-      else{
-        res.status(403).send("Auth Error")
-      }
+      else res.status(403).send("Auth Error")
     }
   })
 })
 
 router.post("/authorityLogin",(req,res)=>{
   authorities.findOne({email:req.body.email},(err,authority)=>{
-    if(err){
-      res.status(500).send("There has been an error")
-    }
-    else if(authority == null){
-      res.status(404).send("No account with given credentials exists")
-    }
+    if(err) res.status(500).send("There has been an error")
+    else if(authority == null) res.status(404).send("No account with given credentials exists")
     else{
       if(bcrypt.compareSync(req.body.password,authority.password)){
         var token = jwt.sign({ id: authority._id }, config.secret, { expiresIn: 86400 });
         res.send({"token":token})
       }
-      else{
-        res.status(403).send("Auth Error")
-      }
+      else res.status(403).send("Auth Error")
     }
   })
 })
 
 router.get("/verifyResidentEmail/:id",(req,res)=>{
   residents.findByIdAndUpdate(req.params.id,{_emailVerified:true}).then((resident)=>{
-    if(resident!=null){
-      res.send("Verified")
-    }
-    else{
-      res.status(404).send("Account Not Found")
-    }
+    if(resident) res.send("Verified")
+    else res.status(404).send("Account Not Found")
   }).catch((err)=>{
     console.log(err)
     res.status(500).send("DB error")
@@ -130,12 +107,8 @@ router.get("/verifyResidentEmail/:id",(req,res)=>{
 
 router.get("/verifyAuthorityEmail/:id",(req,res)=>{
   authorities.findByIdAndUpdate(req.params.id,{_emailVerified:true}).then((authority)=>{
-    if(authority!=null){
-      res.send("Verified")
-    }
-    else{
-      res.status(404).send("Account Not Found")
-    }
+    if(authority) res.send("Verified")
+    else res.status(404).send("Account Not Found")
   }).catch((err)=>{
     console.log(err)
     res.status(500).send("DB error")

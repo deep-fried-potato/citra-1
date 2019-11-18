@@ -9,7 +9,9 @@ var issues = require("../models/issue")
 
 router.get("/profile",authorityValidate,(req,res)=>{
   authorities.findById(req.body.authorityId).then((authority)=>{
-    if(authority != null) res.send(authority);
+    let newAuthority = JSON.parse(JSON.stringify(authority));
+    delete newAuthority.password
+    if(authority) res.send(newAuthority);
     else res.status(404).send("Account not found")
   }).catch((err)=>{
     res.status(500).send("db error")
@@ -58,9 +60,7 @@ router.post("/addReward/:issueId",authorityValidate,(req,res)=>{
       allow_repeated_payments: false}
 
     request.post('https://test.instamojo.com/api/1.1/payment-requests/', {form: payload,  headers: headers}, function(error, response, body){
-      if(!error && response.statusCode == 201){
-        res.send(body);
-      }
+      if(!error && response.statusCode == 201) res.send(body);
     })
   }).catch((err)=>{
     console.log(err)
@@ -77,15 +77,18 @@ router.post("/confirmPayment",(req,res)=>{
       res.status(500).send()
     })
   }
-  else{
-    res.status(403).send()
-  }
+  else res.status(403).send()
 })
 
 function authorityValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
-    req.body.authorityId = id;
-    next();
+    authorities.findById(id).then((authority)=>{
+      if (authority._emailVerified){
+        req.body.authorityId = id;
+        next();
+      }
+      else res.status(403).send("Email not verified")
+    })
   }).catch((err)=>{
     res.status(403).send("Token Error")
   })

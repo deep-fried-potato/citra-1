@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const axios = require('axios')
 var router = express.Router()
 const token2id = require("../helpers/token2id")
@@ -8,16 +9,18 @@ var issues = require("../models/issue")
 
 router.get("/profile",residentValidate,(req,res)=>{
   residents.findById(req.body.residentId).then((resident)=>{
-    if(resident != null) res.send(resident);
+    let newResident = JSON.parse(JSON.stringify(resident));
+    delete newResident.password
+    if(resident != null) res.send(newResident);
     else res.status(404).send("Account not found")
   }).catch((err)=>{
     res.status(500).send("db error")
   })
 })
 
-router.post("/deleteProfile",residentValidate,(req,res)=>{
+router.delete("/deleteProfile",residentValidate,(req,res)=>{
   residents.findByIdAndDelete(req.body.residentId).then((resident)=>{
-    res.send("Deleted")
+    res.send("Deleted " + resident.email)
   }).catch((err)=>{
     res.status(500).send("DB error")
   })
@@ -27,8 +30,11 @@ router.put("/updateProfile",residentValidate,(req, res)=>{
   delete req.body.update.rewardCredits;
   delete req.body.update._emailVerified;
   delete req.body.update._phoneVerified;
+  if (req.body.update.password) req.body.update.password = bcrypt.hashSync(req.body.update.password, 8);
   residents.findByIdAndUpdate(req.body.residentId, {$set: req.body.update},{new:true}).then((resident)=>{
-    res.send(resident)
+    let newResident = JSON.parse(JSON.stringify(resident));
+    delete newResident.password
+    res.send(newResident)
   }).catch((err)=>{
     res.status(500).send(err)
   })
@@ -98,9 +104,7 @@ router.post("/verifyIssue/:issueId",residentValidate,(req,res)=>{
         res.status(500).send("error")
       })
     }
-    else{
-      res.status(400).send("Bad request")
-    }
+    else res.status(400).send("Bad request")
   }).catch((err)=>{
     console.log(err)
     res.status(500).send("Error")
@@ -125,8 +129,13 @@ router.get("/getAuthorities",residentValidate,(req,res)=>{
 
 function residentValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
-    req.body.residentId = id;
-    next();
+    residents.findById(id).then((resident)=>{
+      if (resident._emailVerified){
+        req.body.residentId = id;
+        next();
+      }
+      else res.status(403).send("Email not verified")
+    })
   }).catch((err)=>{
     res.status(403).send("Token Error")
   })
