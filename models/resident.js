@@ -19,6 +19,7 @@ var mongoose = require('mongoose');
       default: false
     },
     photo: String,
+    medicalData:String,
     plusCode: String,
     location:{
       lat: Number,

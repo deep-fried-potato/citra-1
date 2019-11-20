@@ -4,6 +4,7 @@ const token2id = require("../helpers/token2id")
 var residents = require("../models/resident")
 var authorities = require("../models/authority")
 var issues = require("../models/issue")
+var sosalerts = require("../models/sosalert")
 
 router.get("/getIssues",userValidate,(req,res)=>{
   var rad = parseFloat(req.query.rad)
@@ -45,6 +46,17 @@ router.post("/commentIssue/:issueId",userValidate,(req,res)=>{
   })
 })
 
+router.get('/viewSOS/:sosId',userValidate,(req,res)=>{
+  sosalerts.findById(req.params.sosId).populate("addedBy",'-password').exec((err,sosalert)=>{
+    if(err){
+      res.status(500).send(err)
+    }
+    else{
+      res.send(sosalert)
+    }
+  })
+})
+
 function userValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.userId = id;
@@ -61,7 +73,7 @@ function userValidate(req,res,next){
     if (!req.body.isResident){
       authorities.findById(id).then((authority)=>{
         if (!authority._emailVerified) res.status(403).send("Email not verified")
-      })
+      }) //DO SOMETHING HERE NO CATCH HERE!!!!!
     }
 
   }).catch((err)=>{ res.status(403).send("Token Error") })

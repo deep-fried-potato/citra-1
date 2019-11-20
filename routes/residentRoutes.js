@@ -6,6 +6,7 @@ const token2id = require("../helpers/token2id")
 var residents = require("../models/resident")
 var authorities = require("../models/authority")
 var issues = require("../models/issue")
+var sosalerts = require("../models/sosalert")
 
 router.get("/profile",residentValidate,(req,res)=>{
   residents.findById(req.body.residentId).then((resident)=>{
@@ -124,6 +125,19 @@ router.get("/getAuthorities",residentValidate,(req,res)=>{
     res.send(authorityList)
   }).catch((err)=>{
     res.status(400).send("Bad Request")
+  })
+})
+
+router.post("/SaveMySoul",residentValidate,(req,res)=>{
+  sosalerts.create({
+    alertType:req.body.alertType,
+    location:req.body.location,
+    addedBy:req.body.residentId
+  }).then((newsosalert)=>{
+    //Add Code for Notification/SMS here
+    res.send(newsosalert)
+  }).catch((err)=>{
+    res.status(401).send(err)
   })
 })
 
