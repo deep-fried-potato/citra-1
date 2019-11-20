@@ -28,6 +28,7 @@ export default class LoginScreen extends React.Component{
               <Input 
               onChangeText = {text => this.setState({'password':text})}
               value = {this.state.password}
+              secureTextEntry={true}
               />
             </Item>
               <Button 
@@ -54,7 +55,7 @@ export default class LoginScreen extends React.Component{
           />
         </Footer>
       </Container>
-  )
+    )
   }
 
   _signInAsync = () => {
@@ -81,6 +82,5 @@ export default class LoginScreen extends React.Component{
       }
     })
     .catch(err => (console.log('Error', err)));
-
   }
 }

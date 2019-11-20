@@ -146,10 +146,10 @@ class feed extends React.Component{
         const userToken = await AsyncStorage.getItem('userToken');
         axios.get('http://139.59.75.22:3000/common/getIssues', {
             params:{
-                // lat: this.state.lat || 17.399320,
-                // lng: this.state.lng || 78.521402,
-                lat: 17.399320,
-                lng: 78.521402,
+                lat: this.state.lat ,
+                lng: this.state.lng ,
+                // lat: 17.399320,
+                // lng: 78.521402,
                 rad: this.state.rad,
             },
             headers: {

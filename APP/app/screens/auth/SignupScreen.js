@@ -6,31 +6,33 @@ export default class LoginScreen extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+        name: '',
         email : '',
         password:'',
         password2 : '',
     }
   }
 
-  // login = () => {
-  //   fetch('http://172.18.0.1:3000/auth/residentLogin/', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type' : 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email: this.state.email,
-  //       password: this.state.password,
-  //     }),
-  //   })
-  //   .then((response) => response.text())
-  //   .then((resjson) => {
-  //     console.log(resjson)
-  //     return resjson
-  //   })
-  //   .catch(err => (console.log('Error', err)));
-  // }
+  signup = () => {
+    fetch('http://139.59.75.22:3000/auth/registerResident', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password,
+        name: this.state.name
+      }),
+    })
+    .then((response) => response.text())
+    .then((resjson) => {
+      console.log(resjson)
+      return resjson
+    })
+    .catch(err => (console.log('Error', err)));
+  }
 
   render(){
   return(
@@ -38,6 +40,14 @@ export default class LoginScreen extends React.Component{
         <Header />
         <Content>
           <Form>
+
+          <Item floatingLabel>
+              <Label>Name</Label>
+              <Input 
+              onChangeText = {text => this.setState({'name':text})}
+              value = {this.state.name}
+              />
+            </Item>
             <Item floatingLabel>
               <Label>Email</Label>
               <Input 
@@ -86,6 +96,8 @@ export default class LoginScreen extends React.Component{
     else{
     // redirect to login
     // validation via email
+      console.log(this.state)
+      this.signup();
       alert('Verify your account. Check your inbox for more info');
       this.props.navigation.navigate('loginscreen');
     }
