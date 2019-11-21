@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react"
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator} from 'react-navigation-stack';
@@ -37,8 +38,16 @@ export default createAppContainer(createSwitchNavigator({
 }
 ));
 
-//TODO-
-// Form validation;
-// signup validation
-// styling
-// integrate
+=======
+import React from "react";
+
+import Footer from "./components/footer";
+import Sidebar from "./components/sidebar";
+import {Root} from "native-base";
+
+
+export default () =>
+    <Root>
+        <Footer/>
+    </Root>
+>>>>>>> 5df52166c1cf53b963f76c35663b37b80bbb956b
