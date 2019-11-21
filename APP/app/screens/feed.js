@@ -144,12 +144,13 @@ class feed extends React.Component{
 
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
-        axios.get('http://139.59.75.22:3000/common/getIssues', {
+        // console.log(userToken)
+        axios.get('http://172.18.0.1:3000/common/getIssues', {
             params:{
-                lat: this.state.lat ,
-                lng: this.state.lng ,
-                // lat: 17.399320,
-                // lng: 78.521402,
+                // lat: this.state.lat ,
+                // lng: this.state.lng ,
+                lat: 17.399320,
+                lng: 78.521402,
                 rad: this.state.rad,
             },
             headers: {
@@ -159,11 +160,13 @@ class feed extends React.Component{
         .then(resjson => {
             // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
             //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
+            console.log(resjson)
             this.setState({feed: Object.values(resjson.data) , refreshing: false})
             // console.info(this.state.feed[0])
         })
-        .catch(err => {
+        .catch((err,res) => {
             console.log(err)
+            console.log(res)
             this.setState({refreshing:false})
         })
     }

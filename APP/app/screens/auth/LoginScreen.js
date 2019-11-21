@@ -58,8 +58,9 @@ export default class LoginScreen extends React.Component{
     )
   }
 
-  _signInAsync = () => {
-    fetch('http://139.59.75.22:3000/auth/residentLogin', {
+  _signInAsync = async () => {
+    console.log('Clicked')
+    fetch('http://172.18.0.1:3000/auth/residentLogin', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

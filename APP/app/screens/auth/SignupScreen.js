@@ -14,7 +14,7 @@ export default class LoginScreen extends React.Component{
   }
 
   signup = () => {
-    fetch('http://139.59.75.22:3000/auth/registerResident', {
+    fetch('http://172.18.0.1:3000/auth/registerResident', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
