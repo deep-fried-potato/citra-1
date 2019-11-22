@@ -70,7 +70,7 @@ export default class LoginScreen extends React.Component{
               />
             </Item>
               <Button 
-              style = {styles.btn} 
+              // style = {styles.btn} 
               // onPress = {this.login}
               onPress={this._signUp}
               title = 'Register'
@@ -101,14 +101,5 @@ export default class LoginScreen extends React.Component{
       alert('Verify your account. Check your inbox for more info');
       this.props.navigation.navigate('loginscreen');
     }
-    
-    
+  }
 }
-}
-
-const styles = StyleSheet.create({
-  btn:{
-    textAlign : 'center',
-    color: 'red',
-  },
-})
