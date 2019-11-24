@@ -7,6 +7,5 @@ import {Root, Text} from "native-base";
 
 export default () =>
     <Root>
-        {/* <Footer/> */}
         <Appcontainer />
     </Root> 

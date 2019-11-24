@@ -77,6 +77,7 @@ export default class LoginScreen extends React.Component{
       console.log(resjson)
       if (resjson.token){
         await AsyncStorage.setItem('userToken', resjson.token);
+        await AsyncStorage.setItem('userId', this.state.email);
         this.props.navigation.navigate('App')
       }
       else{

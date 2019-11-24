@@ -70,8 +70,7 @@ class Home extends Component {
         this.props.navigation.navigate('Auth');
     }
     _viewfeed = async () => {
-        let token = await AsyncStorage.getItem('userToken');
-        await this.props.navigation.navigate('feedscreen',{token: token});
+        await this.props.navigation.navigate('feedscreen');
     }
 
     render() {

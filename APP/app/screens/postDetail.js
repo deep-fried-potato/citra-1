@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {AsyncStorage} from 'react-native';
 import {Text, Container} from 'native-base';
@@ -24,7 +23,7 @@ class PostDetail extends React.Component {
         })
         // .then(response => response.json())
         .then(res => {
-            console.log('lll', res.data)
+            // console.log('lll', res.data)
             this.setState({'post': res.data})
         })
         .catch(err => {console.log(err)})
