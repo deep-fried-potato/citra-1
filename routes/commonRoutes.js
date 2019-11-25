@@ -57,6 +57,26 @@ router.get('/viewSOS/:sosId',userValidate,(req,res)=>{
   })
 })
 
+router.get("/profileById/:userId",userValidate,(req,res)=>{
+  residents.findById(req.params.userId,{"name":true, "photo":true}).then((resident)=>{
+    if (resident){
+      res.send(resident)
+    }
+    else{
+      authorities.findById(req.params.userId,{"password":false}).then((authority)=>{
+        if (authority) {
+          res.send(authority)
+        }
+        else res.status(404).send("Account not found")
+      }).catch((err)=>{
+        res.status(500).send("DB error")
+      })
+    }
+  }).catch((err)=>{
+      res.status(500).send("DB error")
+  })
+})
+
 function userValidate(req,res,next){
   token2id(req.get("x-access-token")).then((id)=>{
     req.body.userId = id;
@@ -66,16 +86,15 @@ function userValidate(req,res,next){
         req.body.isResident = true;
         next();
       }
-      else req.body.isResident = false;
+      else {
+        authorities.findById(id).then((authority)=>{
+          if (!authority._emailVerified) res.status(403).send("Email not verified")
+        }).catch((err)=>{res.status(500).send(err)})
+        req.body.isResident = false;
+      }
     }).catch((err)=>{
       res.status(500).send("DB Error")
     })
-    if (!req.body.isResident){
-      authorities.findById(id).then((authority)=>{
-        if (!authority._emailVerified) res.status(403).send("Email not verified")
-      }) //DO SOMETHING HERE NO CATCH HERE!!!!!
-    }
-
   }).catch((err)=>{ res.status(403).send("Token Error") })
 
 }

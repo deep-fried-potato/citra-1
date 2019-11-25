@@ -43,16 +43,11 @@ router.put("/updateProfile",residentValidate,(req, res)=>{
 
 router.post("/addIssue",residentValidate,(req,res)=>{
   axios.get(`https://plus.codes/api?address=${req.body.location.lat},${req.body.location.lng}&email=YOUR_EMAIL_HERE`).then((response)=>{
-    issues.create({
-      title:req.body.title,
-      description:req.body.description,
-      photo:req.body.photo,
-      typeOfIssue:req.body.typeOfIssue,
-      location:req.body.location,
-      plusCode:response.data.plus_code.global_code,
-      addedDate: new Date(),
-      addedBy:req.body.residentId
-    }).then((newIssue)=>{
+    requestedIssue = req.body
+    requestedIssue.addedBy = req.body.residentId
+    requestedIssue.plusCode = response.data.plus_code.global_code
+    requestedIssue.addedDate = new Date()
+    issues.create(requestedIssue).then((newIssue)=>{
       res.send(newIssue)
     }).catch((err)=>{
       res.status(400).send("Error in request")
