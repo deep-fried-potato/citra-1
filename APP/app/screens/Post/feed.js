@@ -25,7 +25,6 @@ class feed extends React.Component{
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         this.setState({userToken});
-
         axios.get('http://172.18.0.1:3000/common/getIssues', {
             params:{
                 // lat: this.state.lat ,
@@ -45,6 +44,7 @@ class feed extends React.Component{
             this.setState({feed: Object.values(resjson.data) , refreshing: false})
         })
         .catch((err,res) => {
+            // console.error(err)
             this.setState({refreshing:false})
         })
     }
@@ -107,11 +107,12 @@ class feed extends React.Component{
 
     componentDidMount = async () => {
         await this._setCurrentLocation();
-        await this._fetchfeed()
+        await this._fetchfeed();
     }
 
 
     render(){
+        // console.log(this.state.feed);
         return(
             <FlatList 
                 data = {this.state.feed}

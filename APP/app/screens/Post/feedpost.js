@@ -16,6 +16,7 @@ class Item extends React.Component{
             upvote: false,
             total_upvote: null,
             options : {},
+            userId: null,
         }
     }
 
@@ -71,9 +72,33 @@ class Item extends React.Component{
         }
     }
 
+    _deletePost = (postId) => {
+        fetch(`http://172.18.0.1:3000/resident/deleteIssue/:${postId}`,{
+            method: 'POST',
+            headers: { 
+                Accept: 'application/json',
+                'Content-Type' : 'application/json',
+                'x-access-token': this.props.token
+            }
+            })
+            .then(response => response.json())
+            .then((resjson) => {
+                // this.setState({'upvote' : true, 'total_upvote': this.state.total_upvote+1});
+                console.log('Post Deleted')
+                console.log(resjson);
+            })
+            .catch(err => (console.log('Error', err)));
+    }
+
+    _getUserFromStorageAsync = async () => {
+        let userId = await AsyncStorage.getItem('userId');
+        this.setState({'userId': userId})
+    }
+
     componentDidMount = () => {
         this._parseDate();
         this._parseDistance();
+        this._getUserFromStorageAsync();
         this.setState({'total_upvote':this.props.card.upvotes.length})
     }
 
@@ -85,7 +110,11 @@ class Item extends React.Component{
             // { text: "Option 2", icon: "aperture", iconColor: "#ea943b" },
             { text: "Cancel", icon: "close", iconColor: "#25de5b" }
         ]
-        if (this.props.card.addedBy === AsyncStorage.getItem('userId')){
+
+        // console.log(this.state.userId)
+        //TODO:Can't perform delete
+
+        if (this.props.card.addedBy === this.state.userId){
             BUTTONS.push({ text: "Delete", icon: "trash", iconColor: "#fa213b" })
         } 
 
@@ -138,6 +167,10 @@ class Item extends React.Component{
                                 buttonIndex => {
                                     if( buttonIndex == 0){
                                         this.props._removeFromFeed(this.props.card._id)
+                                    }
+                                    else if(BUTTONS[buttonIndex] !== undefined && BUTTONS[buttonIndex]['text'] === 'Delete'){
+                                        this._deletePost(this.props.card.id);
+                                        this.props._removeFromFeed(this.props.card.id);
                                     }
                                 }
                                 )}
