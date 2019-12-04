@@ -10,7 +10,10 @@ export default class LoginScreen extends React.Component{
         password:'',
     }
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> fetching feed
   render(){
   return(
       <Container>
@@ -59,6 +62,7 @@ export default class LoginScreen extends React.Component{
     )
   }
 
+<<<<<<< HEAD
   _signInAsync = async () => {
     console.log('Clicked')
     fetch('http://172.18.0.1:3000/auth/residentLogin', {
@@ -66,6 +70,14 @@ export default class LoginScreen extends React.Component{
       headers: {
         Accept: 'application/json',
        'Content-Type' : 'application/json',
+=======
+  _signInAsync = () => {
+    fetch('http://139.59.75.22:3000/auth/residentLogin', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type' : 'application/json',
+>>>>>>> fetching feed
       },
       body: JSON.stringify({
         email: this.state.email,
@@ -77,8 +89,11 @@ export default class LoginScreen extends React.Component{
       console.log(resjson)
       if (resjson.token){
         await AsyncStorage.setItem('userToken', resjson.token);
+<<<<<<< HEAD
         console.log(this.state.email)
         await AsyncStorage.setItem('userId', this.state.email);
+=======
+>>>>>>> fetching feed
         this.props.navigation.navigate('App')
       }
       else{
@@ -86,5 +101,10 @@ export default class LoginScreen extends React.Component{
       }
     })
     .catch(err => (console.log('Error', err)));
+<<<<<<< HEAD
   }
+=======
+
+  } 
+>>>>>>> fetching feed
 }
