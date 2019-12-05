@@ -18,7 +18,7 @@ var mongoose = require('mongoose');
     },
     _emailVerified : {
       type: Boolean,
-      default: true
+      default: false
     },
     password: String,
     phone: Number,
