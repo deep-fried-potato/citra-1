@@ -20,7 +20,7 @@ class feed extends React.Component{
 
     _postpage = (id) => {
         const postDetail = this.state.feed.filter((item) => item._id === id)
-        console.log(postDetail);
+        // console.log(postDetail);
         this.props.navigation.navigate('postDetailNavigator', {post: postDetail});
     }
 

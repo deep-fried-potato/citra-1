@@ -5,8 +5,8 @@ import axios from 'axios';
 class PostDetail extends React.Component {
     constructor(props){
         super(props);
-        console.log('yay');
-        console.log(this.props.navigation.getParam('post'))
+        // console.log('yay');
+        // console.log(this.props.navigation.getParam('post'))
         this.state = {
             post: []
         }

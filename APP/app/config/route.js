@@ -12,6 +12,7 @@ import ForgotauthScreen from "../screens/forgotauth"
 import {FooterNavigator} from "../components/footer/index"
 import PostDetail from '../screens/Post/postDetail';
 import PostMedia from '../screens/Post/postMedia'
+import PostComments from '../screens/Post/postComments';
 
 const postDetailNavigator = createMaterialBottomTabNavigator({
     Details: {
@@ -23,9 +24,15 @@ const postDetailNavigator = createMaterialBottomTabNavigator({
     Media: {
         screen: PostMedia,
         navigationOptions:{
-            tabBarIcon: ({focused}) =><Icon name="bars" size={20} color={'#DACE91'}/>,
+            tabBarIcon: ({focused}) =><Icon name="image" size={20} color={'#DACE91'}/>,
         },
-    }
+    },
+    Comments: {
+        screen: PostComments,
+        navigationOptions:{
+            tabBarIcon: ({focused}) =><Icon name="comment" size={20} color={'#DACE91'}/>,
+        },
+    }   
 },
 {
     initialRouteName:'Details',

@@ -2,8 +2,6 @@ import React from 'react';
 import {FlatList,  AsyncStorage, PermissionsAndroid} from 'react-native';
 import {Card, Text,CardItem, Left, Right, Icon, Button,Thumbnail, Body, ActionSheet} from 'native-base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Geolocation from '@react-native-community/geolocation';
-import axios from 'axios';
 
 
 class Item extends React.Component{
