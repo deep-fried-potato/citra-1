@@ -1,8 +1,11 @@
-import React from 'react';
-import {StyleSheet, Text, Button, AsyncStorage } from 'react-native'
-import { Container, Header, Content, Form, Item, Input,Footer, Label, Card,CardItem} from 'native-base';
+import React, { Component } from "react";
 
-export default class LoginScreen extends React.Component{
+import styles from "./style";
+import {Keyboard, Text, View, TextInput, TouchableOpacity , TouchableWithoutFeedback, Alert, KeyboardAvoidingView, AsyncStorage} from 'react-native';
+import { Button, Footer } from 'native-base';
+
+
+export default class LoginScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -10,53 +13,38 @@ export default class LoginScreen extends React.Component{
         password:'',
     }
   }
-  render(){
-  return(
-      <Container>
-        <Header />
-        <Content>
-          <Form>
-            <Item floatingLabel>
-              <Label>Email</Label>
-              <Input 
-                onChangeText = {text => this.setState({'email':text})}
-                value = {this.state.email}
-              />
-            </Item>
-            <Item floatingLabel last>
-              <Label>Password</Label>
-              <Input 
+
+  render() {
+    return (
+    
+      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+        <View style={styles.loginScreenContainer}>
+          <View style={styles.loginFormView}>
+          <Text style={styles.logoText}>Citra</Text>
+            <TextInput placeholder="Email" placeholderColor="#c4c3cb" style={styles.loginFormTextInput}
+             onChangeText = {text => this.setState({'email':text})}
+             value = {this.state.email}
+             />
+            <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true}
               onChangeText = {text => this.setState({'password':text})}
               value = {this.state.password}
-              secureTextEntry={true}
-              />
-            </Item>
-              <Button 
-              // onPress = {this.login}
-              onPress = {this._signInAsync}
-              // onPress = {() => window.alert(this.state.password)}
-              title = 'Sign In'
-              />
-          </Form>
-          <Card>
-            <CardItem>
-              <Button 
-                title='forgot Password?'
-                onPress={ () => {this.props.navigation.navigate('forgotauth')} }
-              />
-            </CardItem>
-          </Card>
-        </Content>
-        <Footer>
-          <Text>Don't have a Citra account?</Text>
-          <Button
-            onPress = {() => {this.props.navigation.navigate('signupscreen')}} 
-            title = "Reigister"
-          />
-        </Footer>
-      </Container>
-    )
+            />
+            <Button style={styles.loginButton} onPress={() => this._signInAsync()} >
+              <Text>Login</Text>
+            </Button>
+            <TouchableOpacity style={styles.  fbLoginButton} onPress={ () => {this.props.navigation.navigate('forgotauth')} } >
+              <Text style ={{color:"#3897f1"}}>Forgot Password?</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity style={styles.  fbLoginButton} onPress = {() => {this.props.navigation.navigate('signupscreen')}} >
+            <Text style ={{color:"#3897f1"}}>Sign Up</Text>
+        </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+      
+    );
   }
+
 
   _signInAsync = async () => {
     console.log('Clicked')
@@ -85,6 +73,5 @@ export default class LoginScreen extends React.Component{
       }
     })
     .catch(err => (console.log('Error', err)));
-
   }
 }

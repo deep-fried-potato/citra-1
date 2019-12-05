@@ -8,7 +8,7 @@ import Feedscreen from '../screens/Post/feed'
 import LoginScreen from "../screens/auth/LoginScreen"
 import SignupScreen from "../screens/auth/SignupScreen"
 import Authloadingscreen from "../screens/Authloading"
-import ForgotauthScreen from "../screens/forgotauth"
+import ForgotauthScreen from "../screens/auth/forgotauth"
 import {FooterNavigator} from "../components/footer/index"
 import PostDetail from '../screens/Post/postDetail';
 import PostMedia from '../screens/Post/postMedia'
