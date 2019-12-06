@@ -7,7 +7,9 @@ export default class Comment extends React.Component{
     constructor(props){
         super(props)
     }
+
     render(){
+        console.log(this.props.comment)
         return(
             <Card style={{backgroundColor:'#797c86'}} >
                 <CardItem header>

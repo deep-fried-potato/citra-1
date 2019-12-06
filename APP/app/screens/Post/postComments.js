@@ -7,6 +7,7 @@ class PostComments extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            userToken: '',
             resComments : [],
             autComments : [],
             comment: '',
@@ -16,10 +17,36 @@ class PostComments extends React.Component {
         }
     }
 
-    componentDidMount = () => {
+
+    getUser = (id, userToken) => {
+        fetch(`http://10.0.33.176:3000/common/profileById/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type' : 'application/json',
+                'x-access-token': userToken
+              },
+        })
+        .then(res => res.json())
+        .then(res => res.name)
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    mapComments = (comment, userToken)=>{
+        console.log(comment)
+        let usr = this.getUser(comment.user, userToken)
+        comment.user = usr
+        return comment
+    }
+
+    componentDidMount = async () => {
+        let userToken = await AsyncStorage.getItem('userToken');
         let post =  this.props.navigation.getParam('post')
-        let resComments = post[0].residentComments
-        let autComments = post[0].authorityComments
+        let resComments =  post[0].residentComments
+        let autComments =  post[0].authorityComments
+        console.log(resComments)
         this.setState({resComments, autComments, post, 'data':resComments})
     }
 
@@ -34,9 +61,12 @@ class PostComments extends React.Component {
     }
 
     _addComment = async () => {
+        if (this.state.comment == ''){
+            return
+        }
         const userToken = await AsyncStorage.getItem('userToken');
         console.info(this.state.post[0]._id);
-        fetch(`http://localhost:3000/common/commentIssue/${this.state.post[0]._id}`, {
+        fetch(`http://10.0.33.176:3000/common/commentIssue/${this.state.post[0]._id}`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -49,7 +79,7 @@ class PostComments extends React.Component {
             .then(res => res.json())
             .then((response) => {
                 if (response){
-                    this.setState({'selected':'key0','data':response.residentComments})
+                    this.setState({'selected':'key0','data':response.residentComments.map(this.mapComments), 'resComments': response.residentComments})
                     this.setState({'comment':''})
                 }
             })
@@ -78,7 +108,7 @@ class PostComments extends React.Component {
             </Header>
             <FlatList
                 data = {this.state.data}
-                renderItem = {(item) => <Comment comment={item}/>}
+                renderItem = {(item) => <Comment comment={item} userToken={this.state.userToken}/>}
                 keyExtractor = {item => item._id}
             />
 
@@ -89,7 +119,7 @@ class PostComments extends React.Component {
                     onChangeText = {text => this.setState({'comment':text})}
                     value = {this.state.comment}
                 />
-                <Button  onPress = {() => this._addComment()}>
+                <Button onPress = {() => this._addComment()}>
                     <Icon active name='paper-plane' />
                 </Button>
             </Item> 

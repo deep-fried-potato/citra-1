@@ -48,7 +48,7 @@ export default class LoginScreen extends Component {
 
   _signInAsync = async () => {
     console.log('Clicked')
-    fetch('http://localhost:3000/auth/residentLogin', {
+    fetch('http://10.0.33.176:3000/auth/residentLogin', {
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -59,7 +59,8 @@ export default class LoginScreen extends Component {
         password: this.state.password,
       }),
     })
-    .then((response) => response.json())
+    .then((response) => {console.log(response)
+                          return response.json()})
     .then(async (resjson) => {
       console.log(resjson)
       if (resjson.token){

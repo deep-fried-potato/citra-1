@@ -56,7 +56,7 @@ export default class SignupScreen extends Component {
       this.setState({'password':'', 'password2':''});
     }
     else{
-      fetch('http://localhost:3000/auth/registerResident', {
+      fetch('http://10.0.33.176:3000/auth/registerResident', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
