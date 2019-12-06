@@ -39,9 +39,12 @@ target 'APP' do
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
 
-  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
 
   target 'APPTests' do
     inherit! :search_paths

@@ -3,7 +3,7 @@ import {createStackNavigator} from "react-navigation-stack";
 import {createAppContainer} from "react-navigation";
 // import { createDrawerNavigator } from 'react-navigation-drawer';
 import Home from "../screens/home/home";
-import PostCreate from "../screens/postCreate";
+import PostCreate from "../screens/postCreate/postCreate";
 import PostDetail from "../screens/postDetail";
 import Search from "../screens/search/search";
 import Notifications from "../screens/notifications";
