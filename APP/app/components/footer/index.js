@@ -4,9 +4,9 @@ import {createBottomTabNavigator} from "react-navigation-tabs";
 import {createStackNavigator} from "react-navigation-stack";
 import TabBarComponent from "./footer";
 import Icon from "react-native-vector-icons/Feather";
-import Home from "../../screens/home/home";
+import Home from "../../screens/home/";
 import Search from "../../screens/search/search";
-import PostCreate from "../../screens/postCreate";
+import PostCreate from "../../screens/postCreate/";
 import Notifications from "../../screens/notifications";
 import Sos from "../../screens/sos";
 import {Body, Header, Left, Right, Thumbnail, Button, Text} from "native-base";
@@ -26,11 +26,11 @@ const postModalStack = createStackNavigator({
             header:(
                 <Header style={styles.banner}>
                     <Left>
-                        <Icon color="#000" size={20} name="arrow-left"></Icon>
+                        {/*<Icon color="#000" size={20} name="arrow-left"></Icon>*/}
                     </Left>
                     <Body/>
                     <Right>
-                        <Button style={styles.btn} rounded small>
+                        <Button onPress style={styles.btn} rounded small>
                             <Text>Post</Text>
                         </Button>
                     </Right>
@@ -65,7 +65,7 @@ const FooterNavigator = createBottomTabNavigator({
         }
     },
     PostCreate:{
-        screen:postModalStack,
+        screen:PostCreate,
         navigationOptions: {
             tabBarLabel:"Post",
             tabBarIcon:({tintColor})=>(
