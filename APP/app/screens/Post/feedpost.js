@@ -50,7 +50,7 @@ class Item extends React.Component{
         //TODO: if this.props.card.post.upvotes has userid :
         // console.log(this.props.card._id)
         if (!this.state.upvote){
-            fetch(`http://172.18.0.1:3000/resident/upvoteIssue/:${this.props.card._id}`,{
+            fetch(`http://localhost:3000/resident/upvoteIssue/:${this.props.card._id}`,{
                 method: 'POST',
                 headers: { 
                     Accept: 'application/json',
@@ -71,7 +71,7 @@ class Item extends React.Component{
     }
 
     _deletePost = (postId) => {
-        fetch(`http://172.18.0.1:3000/resident/deleteIssue/:${postId}`,{
+        fetch(`http://localhost:3000/resident/deleteIssue/:${postId}`,{
             method: 'POST',
             headers: { 
                 Accept: 'application/json',

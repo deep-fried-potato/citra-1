@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import styles from "./style";
 import {Keyboard, Text, View, TextInput, TouchableOpacity , TouchableWithoutFeedback, Alert, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import { Button, Footer } from 'native-base';
-
+import axios from 'axios';
 
 export default class LoginScreen extends Component {
   constructor(props){
@@ -48,8 +48,8 @@ export default class LoginScreen extends Component {
 
   _signInAsync = async () => {
     console.log('Clicked')
-    fetch('http://172.18.0.1:3000/auth/residentLogin', {
-      method: 'POST',
+    fetch('http://localhost:3000/auth/residentLogin', {
+      method: 'post',
       headers: {
         Accept: 'application/json',
        'Content-Type' : 'application/json',

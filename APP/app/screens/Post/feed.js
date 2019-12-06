@@ -27,7 +27,7 @@ class feed extends React.Component{
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         this.setState({userToken});
-        axios.get('http://172.18.0.1:3000/common/getIssues', {
+        axios.get('http://localhost:3000/common/getIssues', {
             params:{
                 // lat: this.state.lat ,
                 // lng: this.state.lng ,

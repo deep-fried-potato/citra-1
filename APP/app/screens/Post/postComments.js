@@ -36,7 +36,7 @@ class PostComments extends React.Component {
     _addComment = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         console.info(this.state.post[0]._id);
-        fetch(`http://172.18.0.1:3000/common/commentIssue/${this.state.post[0]._id}`, {
+        fetch(`http://localhost:3000/common/commentIssue/${this.state.post[0]._id}`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
