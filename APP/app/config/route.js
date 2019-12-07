@@ -3,52 +3,52 @@ import {createStackNavigator} from 'react-navigation-stack';
 // import { createDrawerNavigator } from 'react-navigation-drawer'
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Feather';
 
-import Feedscreen from '../screens/Post/feed';
+import Feedscreen from '../screens/Post/feed/index';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import Authloadingscreen from '../screens/Authloading';
 import ForgotauthScreen from '../screens/auth/forgotauth';
 import {FooterNavigator} from '../components/footer/index';
-import PostDetail from '../screens/Post/postDetail';
-import PostMedia from '../screens/Post/postMedia';
-import PostComments from '../screens/Post/postComments';
+import PostDetail from '../screens/Post/detail/index';
+import PostMedia from '../screens/Post/detail/postMedia';
+import PostComments from '../screens/Post/detail/postComments';
 
 const postDetailNavigator = createMaterialBottomTabNavigator(
   {
     Details: {
       screen: PostDetail,
       navigationOptions: {
-        tabBarIcon: ({focused}) => (
-          <Icon name="bars" size={20} color={'#DACE91'} />
+        tabBarIcon: () => (
+          <Icon name="file" size={20} />
         ),
       },
     },
     Media: {
       screen: PostMedia,
       navigationOptions: {
-        tabBarIcon: ({focused}) => (
-          <Icon name="image" size={20} color={'#DACE91'} />
+        tabBarIcon: () => (
+          <Icon name="image" size={20} />
         ),
       },
     },
     Comments: {
       screen: PostComments,
       navigationOptions: {
-        tabBarIcon: ({focused}) => (
-          <Icon name="comment" size={20} color={'#DACE91'} />
+        tabBarIcon: () => (
+          <Icon name="message-square" size={20} />
         ),
       },
     },
   },
   {
     initialRouteName: 'Details',
-    activeColor: '#f0edf6',
-    inactiveColor: '#3e2465',
+    activeColor: 'blue',
+    inactiveColor: '#8e8e93',
     shifting: false,
     labeled: true,
-    barStyle: {backgroundColor: '#694fad'},
+    barStyle: {backgroundColor: '#fff'},
   },
 );
 
