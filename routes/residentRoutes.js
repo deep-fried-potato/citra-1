@@ -3,10 +3,14 @@ const bcrypt = require('bcryptjs');
 const axios = require('axios')
 var router = express.Router()
 const token2id = require("../helpers/token2id")
+const getNearbyUsers = require("../helpers/getNearbyUsers")
 var residents = require("../models/resident")
 var authorities = require("../models/authority")
 var issues = require("../models/issue")
 var sosalerts = require("../models/sosalert")
+const authToken = '982d3818fc5193e0e68e5ce56c0c8eca';
+const accountSid = 'AC5b2f12643d3012b3dae4be6b0ac8958e';
+const client = require('twilio')(accountSid, authToken);
 
 router.get("/profile",residentValidate,(req,res)=>{
   residents.findById(req.body.residentId).then((resident)=>{
@@ -129,7 +133,16 @@ router.post("/SaveMySoul",residentValidate,(req,res)=>{
     location:req.body.location,
     addedBy:req.body.residentId
   }).then((newsosalert)=>{
-    //Add Code for Notification/SMS here
+    client.messages
+          .create({
+             body: 'Message new testing just for fun ',
+             from: '+14843417214',
+             to: "+919131833801"
+           })
+          .then(message => console.log(message.sid))
+          .catch((err)=>{
+            console.log(err)
+          });
     res.send(newsosalert)
   }).catch((err)=>{
     res.status(401).send(err)

@@ -21,6 +21,7 @@
     "mocha": "^6.2.0",
     "mongoose": "^5.7.1",
     "nodemailer": "^6.3.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "twilio": "^3.38.0"
   }
 }
