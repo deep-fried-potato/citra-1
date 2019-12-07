@@ -91,6 +91,7 @@ function userValidate(req,res,next){
           if (!authority._emailVerified) res.status(403).send("Email not verified")
         }).catch((err)=>{res.status(500).send(err)})
         req.body.isResident = false;
+        next();
       }
     }).catch((err)=>{
       res.status(500).send("DB Error")
