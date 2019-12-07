@@ -1,15 +1,30 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import {View, SafeAreaView, Image, TouchableOpacity, ScrollView} from "react-native";
-import {Container, Textarea, Form, Footer, Grid, Col, Item, Input, Left, Body, Right, Button, Text, Header} from 'native-base';
+import {
+    Container,
+    Textarea,
+    Form,
+    Footer,
+    Grid,
+    Col,
+    Item,
+    Input,
+    Left,
+    Body,
+    Right,
+    Button,
+    Text,
+    Header
+} from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
 import Banner from "../../components/banner";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import Config from "react-native-config";
 import Geolocation from '@react-native-community/geolocation';
-import { RNS3 } from 'react-native-aws3';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {styles, multiSelect} from "./styles";
+import post from "../../api/post"
 
 const items = [
     // this is the parent or 'item'
@@ -47,6 +62,18 @@ const items = [
 
 
 class PostCreate extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            title: null,
+            description: null,
+            media: [],
+            mediaType: null,
+            selectedItems: [],
+            location: null,
+        };
+        this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this)
+    }
 
     componentDidMount(): void {
         Geolocation.watchPosition(position => {
@@ -62,21 +89,6 @@ class PostCreate extends Component {
             {enableHighAccuracy: true, timeout: 200000, maximumAge: 0});
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            title: null,
-            description: null,
-            media: [],
-            mediaType: null,
-            inputRows: 20,
-            selectedItems: [],
-            location: null,
-            token: null
-        };
-        this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this)
-    }
-
 
     onSelectedItemsChange(selectedItems) {
         this.setState({selectedItems});
@@ -84,11 +96,12 @@ class PostCreate extends Component {
 
     handleCamera() {
         ImageCropPicker.openCamera({cropping: true})
-        .then(image => {
-            this.setState({
-                media: [...this.state.media, image.path],
-            })
-        });
+            .then(image => {
+                this.setState({
+                    media: [...this.state.media, image.path],
+                    mediaType: 'image/jpeg'
+                })
+            });
     };
 
     handleChoosePhoto = () => {
@@ -96,49 +109,15 @@ class PostCreate extends Component {
             multiple: true
         }).then(images => {
             this.setState({
-                media: [...this.state.media, ...images.map(image => image.path)]
+                media: [...this.state.media, ...images.map(image => image.path)],
+                mediaType: 'image/jpeg'
             })
         });
     };
 
-    handlePost = () => {
-        const options = {
-            keyPrefix: Config.AWS_S3_FOLDER,
-            bucket: Config.AWS_S3_BUCKET,
-            region: Config.AWS_REGION,
-            accessKey: Config.AWS_ACCESS_KEY,
-            secretKey: Config.AWS_SECRET_KEY,
-            successActionStatus: 201
-        }
-        console.log("options are ", options)
-        // var mediaUrls = []
-        // this.state.media.map(
-        //     image =>{
-        //         console.log("image is ", image, " and file name is ", image.replace(/^.*[\\\/]/, ''))
-        //         RNS3.put({uri:image, name:image.replace(/^.*[\\\/]/, ''), type: "image/jpeg"}, options)
-        //             .then((response)=> (mediaUrls.push(response.body.postResponse.location)))
-        //     }
-        // )
-
-        console.log("state is ", this.state)
-
-        // axios.post('localhost:3000/resident/addIssue',
-        //     {
-        //         'title': this.state.title,
-        //         'description': this.state.description,
-        //         'photos': this.state.media,
-        //         'typeOfIssue': this.state.selectedItems,
-        //         'location': this.state.location
-        //     },
-        //     {
-        //         'headers': {
-        //             'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZDA3NDkzNTE5ZDQzMmZjNDA2NGI4MyIsImlhdCI6MTU3Mzk2NjQ0NywiZXhwIjoxNTc0MDUyODQ3fQ.81aRz3CmkFRfH65CqpDPtI_F-tIPuEp5OAqCxm3UOMs'
-        //         }
-        //     })
-    };
+    handlePost = () => post.createIssue(...this.state);
 
     render() {
-        const {media} = this.state;
         return (
             <SafeAreaView style={styles.safeAreaContainer}>
                 <Container>
@@ -154,7 +133,11 @@ class PostCreate extends Component {
                     <ScrollView>
                         <Form>
                             <Item>
-                                <Input placeholder="Title" autoFocus/>
+                                <Input
+                                    value={this.state.title}
+                                    onChangeText={(title) => this.setState({title})}
+                                    placeholder="Title"
+                                    autoFocus/>
                             </Item>
                             <View style={styles.category}>
                                 <SectionedMultiSelect
@@ -170,15 +153,19 @@ class PostCreate extends Component {
                                     selectedItems={this.state.selectedItems}
                                     itemNumberOfLines={1}
                                     selectLabelNumberOfLines={1}
-                                    styles={multiSelect} />
+                                    styles={multiSelect}/>
                             </View>
 
-                            <Textarea onChangeT style={styles.description} rowSpan={10}
-                                      placeholder="What issue are you facing?"/>
+                            <Textarea
+                                value={this.state.description}
+                                onChangeText={(description)=>this.setState({description})}
+                                style={styles.description}
+                                rowSpan={10}
+                                placeholder="What issue are you facing?"/>
                         </Form>
                         {
-                            (media.length != 0) && (
-                                media.map((media, key) => (
+                            (this.state.media.length != 0) && (
+                                this.state.media.map((media, key) => (
                                     <Image
                                         key={key}
                                         source={{uri: media}}
