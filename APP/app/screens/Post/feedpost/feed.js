@@ -2,6 +2,7 @@ import React from 'react';
 import {FlatList,  AsyncStorage, PermissionsAndroid} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import Config from "react-native-config"
 import Item from './feedpost'
 
 class feed extends React.Component{
@@ -27,7 +28,7 @@ class feed extends React.Component{
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         this.setState({userToken});
-        axios.get('http://10.0.33.176:3000/common/getIssues', {
+        axios.get('http://'+Config.BASE_URL+':3000/common/getIssues', {
             params:{
                 // lat: this.state.lat ,
                 // lng: this.state.lng ,
@@ -36,7 +37,7 @@ class feed extends React.Component{
                 rad: this.state.rad,
             },
             headers: {
-                'x-access-token': userToken, 
+                'x-access-token': userToken,
             }
         })
         .then(resjson => {
@@ -57,10 +58,10 @@ class feed extends React.Component{
         }).then((position) => {
             return position;
         })
-        .catch((err) => { 
+        .catch((err) => {
             console.log(err);
         });
-    } 
+    }
 
     _setCurrentLocation = async () => {
         try {
@@ -77,7 +78,7 @@ class feed extends React.Component{
           }
     }
 
-    
+
     _feedByType = (issueType) => {
         let filterByType = (post) => {
             if(post.typeOfIssue === issueType){
@@ -116,15 +117,15 @@ class feed extends React.Component{
     render(){
         // console.log(this.state.feed);
         return(
-            <FlatList 
+            <FlatList
                 data = {this.state.feed}
                 renderItem = {({item}) => <Item card = {item} postpage = {this._postpage}
-                                latitude={this.state.lat} longitude={this.state.lng} token={this.state.userToken} 
+                                latitude={this.state.lat} longitude={this.state.lng} token={this.state.userToken}
                                 _feedByType={this._feedByType} _removeFromFeed={this._removeFromFeed}/>}
                 keyExtractor = {item => item._id}
                 refreshing = {this.state.refreshing}
                 onRefresh = {this.handlerefresh}
-            /> 
+            />
         );
     }
 }
