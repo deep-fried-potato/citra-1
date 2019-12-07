@@ -1,20 +1,35 @@
 import React from 'react';
-import {AsyncStorage, View, Text, FlatList} from 'react-native';
-import { Container, Header, Content, Item, Icon, Input, Button, Footer,Form, Picker } from 'native-base';
+import {AsyncStorage, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {
+    Container,
+    Header,
+    Content,
+    Item,
+    Input,
+    Button,
+    Footer,
+    Form,
+    Picker,
+    Left,
+    Body,
+    Right
+} from 'native-base';
+import Icon from "react-native-vector-icons/Feather";
 import Comment from './comment'
 import Config from "react-native-config";
+import {styles} from "../../postCreate/styles";
 
 class PostComments extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             userToken: '',
-            resComments : [],
-            autComments : [],
+            resComments: [],
+            autComments: [],
             comment: '',
             selected: 'key0',
             data: [],
-            post : []
+            post: []
         }
     }
 
@@ -24,18 +39,18 @@ class PostComments extends React.Component {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
                 'x-access-token': userToken
-              },
+            },
         })
-        .then(res => res.json())
-        .then(res => res.name)
-        .catch(err => {
-            console.log(err)
-        })
+            .then(res => res.json())
+            .then(res => res.name)
+            .catch(err => {
+                console.log(err)
+            })
     }
 
-    mapComments = (comment, userToken)=>{
+    mapComments = (comment, userToken) => {
         console.log(comment)
         let usr = this.getUser(comment.user, userToken)
         comment.user = usr
@@ -44,25 +59,24 @@ class PostComments extends React.Component {
 
     componentDidMount = async () => {
         let userToken = await AsyncStorage.getItem('userToken');
-        let post =  this.props.navigation.getParam('post')
-        let resComments =  post[0].residentComments
-        let autComments =  post[0].authorityComments
+        let post = this.props.navigation.getParam('post')
+        let resComments = post[0].residentComments
+        let autComments = post[0].authorityComments
         console.log(resComments)
-        this.setState({resComments, autComments, post, 'data':resComments})
+        this.setState({resComments, autComments, post, 'data': resComments})
     }
 
     onValueChange = (value) => {
         this.setState({selected: value});
-        if (value === 'key0'){
-            this.setState({data:this.state.resComments})
-        }
-        else{
-            this.setState({data:this.state.autComments})
+        if (value === 'key0') {
+            this.setState({data: this.state.resComments})
+        } else {
+            this.setState({data: this.state.autComments})
         }
     }
 
     _addComment = async () => {
-        if (this.state.comment == ''){
+        if (this.state.comment == '') {
             return
         }
         const userToken = await AsyncStorage.getItem('userToken');
@@ -70,63 +84,76 @@ class PostComments extends React.Component {
         fetch(`http://${Config.BASE_URL}:3000/common/commentIssue/${this.state.post[0]._id}`, {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': userToken,
+                'Content-Type': 'application/json',
+                'x-access-token': userToken,
             },
             body: JSON.stringify({
                 text: this.state.comment,
             }),
-            })
+        })
             .then(res => res.json())
             .then((response) => {
-                if (response){
-                    this.setState({'selected':'key0','data':response.residentComments.map(this.mapComments), 'resComments': response.residentComments})
-                    this.setState({'comment':''})
+                if (response) {
+                    this.setState({
+                        'selected': 'key0',
+                        'data': response.residentComments.map(this.mapComments),
+                        'resComments': response.residentComments
+                    })
+                    this.setState({'comment': ''})
                 }
             })
             .catch(err => (console.log('Error', err)));
     }
 
     render() {
-        return(
-        <Container style={{backgroundColor:'#596ca6'}}>
-            <Header style={{backgroundColor:'#4d66b3'}}>
-            <Content>
-            <Form>
-                <Picker
-                    note
-                    mode="dropdown"
-                    style={{ width: 120 }}
-                    iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: "#007aff", fontSize: 25 }} />}
-                    selectedValue={this.state.selected}
-                    onValueChange={this.onValueChange}
-                    >
-                    <Picker.Item label="Resident Comments" value="key0" />
-                    <Picker.Item label="Authority Comments" value="key1" />
-                </Picker>
-            </Form>
-            </Content>
-            </Header>
-            <FlatList
-                data = {this.state.data}
-                renderItem = {(item) => <Comment comment={item} userToken={this.state.userToken}/>}
-                keyExtractor = {item => item._id}
-            />
-
-        <Footer >
-            <Content style={{backgroundColor:'#ffffff'}}>
-            <Item rounded style={{flex:1}}>
-                <Input placeholder='Add Comment'
-                    onChangeText = {text => this.setState({'comment':text})}
-                    value = {this.state.comment}
+        return (
+            <Container>
+                <Header style={styles.banner}>
+                    <Left>
+                        <TouchableOpacity>
+                            <Icon color="#000" size={20} name="arrow-left"></Icon>
+                        </TouchableOpacity>
+                    </Left>
+                    <Body/>
+                    <Right>
+                        <Form>
+                            <Picker
+                                note
+                                mode="dropdown"
+                                style={{width: 120}}
+                                iosIcon={<Icon name="arrow-dropdown-circle" style={{color: "#007aff", fontSize: 25}}/>}
+                                selectedValue={this.state.selected}
+                                onValueChange={this.onValueChange}
+                            >
+                                <Picker.Item label="Resident Comments" value="key0"/>
+                                <Picker.Item label="Authority Comments" value="key1"/>
+                            </Picker>
+                        </Form>
+                    </Right>
+                </Header>
+                <FlatList
+                    data={this.state.data}
+                    renderItem={(item) => <Comment comment={item} userToken={this.state.userToken}/>}
+                    keyExtractor={item => item._id}
                 />
-                <Button onPress = {() => this._addComment()}>
-                    <Icon active name='paper-plane' />
-                </Button>
-            </Item>
-            </Content>
-          </Footer>
-      </Container>
+
+                <Footer style={{flex:0, flexDirection:'row', backgroundColor:'white'}}>
+                    <View style={{flex:0.9}}>
+                        <Item rounded style={{flex:1,margin:6}}>
+                            <Input
+                                style={{borderWidth:0}}
+                                placeholder='Add Comment'
+                                onChangeText = {text => this.setState({'comment':text})}
+                                value = {this.state.comment}/>
+                        </Item>
+                    </View>
+                    <View style={{flex:0.1, justifyContent:'center'}}>
+                        <TouchableOpacity onPress = {() => this._addComment()}>
+                            <Icon size={30} color="blue" style={{alignSelf:'center'}} name='arrow-right-circle' />
+                        </TouchableOpacity>
+                    </View>
+                </Footer>
+            </Container>
         );
     }
 }
