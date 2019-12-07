@@ -23,7 +23,7 @@ router.post("/registerResident",(req,res)=>{
         from: 'citra.app.mailer@gmail.com',
         to: newResident.email,
         subject: 'Email verification',
-        text: 'Your verification code is ' + newResident._id
+        text: 'Your verification link is http://139.59.75.22:3000/auth/verifyResidentEmail/' + newResident._id
       };
       mailer.sendMail(mailOptions, function(error, info){
         if (error) console.log(error);
@@ -53,7 +53,7 @@ router.post("/registerAuthority",(req,res)=>{
         from: 'citra.app.mailer@gmail.com',
         to: newAuthority.email,
         subject: 'Email verification',
-        text: 'Your verification code is ' + newAuthority._id
+        text: 'Your verification link is http://139.59.75.22:3000/auth/verifyAuthorityEmail/' + newAuthority._id
       };
       mailer.sendMail(mailOptions, function(error, info){
         if (error) {

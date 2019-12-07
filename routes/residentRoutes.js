@@ -137,14 +137,20 @@ router.post("/SaveMySoul",residentValidate,(req,res)=>{
           .create({
              body: 'Message new testing just for fun ',
              from: '+14843417214',
-             to: "+919131833801"
+             to: getNearbyUsers(req.body.location)
            })
           .then(message => console.log(message.sid))
           .catch((err)=>{
             console.log(err)
           });
+    // getNearbyUsers(req.body.location).then((res)=>{
+    //   console.log(res)
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
     res.send(newsosalert)
   }).catch((err)=>{
+    console.log(err)
     res.status(401).send(err)
   })
 })
