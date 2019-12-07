@@ -9,7 +9,7 @@ import Search from '../../screens/search/search';
 import PostCreate from '../../screens/postCreate/';
 import Notifications from '../../screens/notifications';
 import Sos from '../../screens/sos';
-import Feedscreen from '../../screens/Post/feed';
+import Feedscreen from '../../screens/Post/feed/index';
 import {Body, Header, Left, Right, Thumbnail, Button, Text} from 'native-base';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
@@ -22,34 +22,6 @@ const icon = (iconName, color) => (
   <Icon color={color} size={30} name={iconName}></Icon>
 );
 
-const postModalStack = createStackNavigator(
-  {
-    PostCreate: {
-      screen: PostCreate,
-      navigationOptions: {
-        header: (
-          <Header style={styles.banner}>
-            <Left>
-              {/*<Icon color="#000" size={20} name="arrow-left"></Icon>*/}
-            </Left>
-            <Body />
-            <Right>
-              <Button onPress style={styles.btn} rounded small>
-                <Text>Post</Text>
-              </Button>
-            </Right>
-          </Header>
-        ),
-        // headerLeft:({goBack})=>({
-        //     left:(<Icon onPress={ () => { goBack() } } color="#000" size={20} name="arrow-left"></Icon>)
-        // })
-      },
-    },
-  },
-  {
-    mode: 'modal',
-  },
-);
 
 export const FooterNavigator = createBottomTabNavigator(
   {
@@ -64,7 +36,7 @@ export const FooterNavigator = createBottomTabNavigator(
       screen: Feedscreen,
       navigationOptions: {
         tabBarLabel: 'Feed',
-        tabBarIcon: ({tintColor}) => icon('search', tintColor),
+        tabBarIcon: ({tintColor}) => icon('file-text', tintColor),
       },
     },
     PostCreate: {
