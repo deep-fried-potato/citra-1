@@ -61,14 +61,19 @@ class Home extends Component {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   };
+
   _viewfeed = async () => {
     await this.props.navigation.navigate('feedscreen');
   };
 
+  toggleDrawer = async () => {
+    await this.props.navigation.toggleDrawer();
+  }
+
   render() {
     return (
       <Container>
-        <Banner name="Home" />
+        <Banner name="Home" _toggledrawer={this.toggleDrawer} userName={'Siddhant'}/>
         <View style={styles.container}>
           <MapView
             style={styles.map}

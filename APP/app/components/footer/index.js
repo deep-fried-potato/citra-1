@@ -9,7 +9,7 @@ import Search from '../../screens/search/search';
 import PostCreate from '../../screens/postCreate/';
 import Notifications from '../../screens/notifications';
 import Sos from '../../screens/sos';
-import Feedscreen from '../../screens/Post/feed';
+import Feedscreen from '../../screens/Post/feedpost/feed';
 import {Body, Header, Left, Right, Thumbnail, Button, Text} from 'native-base';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 

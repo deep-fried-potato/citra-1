@@ -21,7 +21,7 @@ class feed extends React.Component{
 
     _postpage = (id) => {
         const postDetail = this.state.feed.filter((item) => item._id === id)
-        // console.log(postDetail);
+        console.log(this.props.navigation);
         this.props.navigation.navigate('postDetailNavigator', {post: postDetail});
     }
 
@@ -44,7 +44,7 @@ class feed extends React.Component{
             // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
             //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
             // console.log(resjson['data'])
-            this.setState({feed: Object.values(resjson.data) , refreshing: false})
+            this.setState({feed: resjson.data , refreshing: false})
         })
         .catch((err,res) => {
             // console.error(err)
@@ -115,7 +115,6 @@ class feed extends React.Component{
 
 
     render(){
-        // console.log(this.state.feed);
         return(
             <FlatList
                 data = {this.state.feed}

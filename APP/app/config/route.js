@@ -1,19 +1,23 @@
 import React from 'react';
+import {TouchableOpacity, Image} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 // import { createDrawerNavigator } from 'react-navigation-drawer'
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Feedscreen from '../screens/Post/feed';
+import Feedscreen from '../screens/Post/feedpost/feed'
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import Authloadingscreen from '../screens/Authloading';
 import ForgotauthScreen from '../screens/auth/forgotauth';
 import {FooterNavigator} from '../components/footer/index';
-import PostDetail from '../screens/Post/postDetail';
-import PostMedia from '../screens/Post/postMedia';
-import PostComments from '../screens/Post/postComments';
+import PostDetail from '../screens/Post/detail/index';
+import PostMedia from '../screens/Post/detail/postMedia';
+import PostComments from '../screens/Post/detail/postMedia';
+import Profile from '../screens/profile/editProfile';
+import DrawerScreen  from '../screens/drawer'
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const postDetailNavigator = createMaterialBottomTabNavigator(
   {
@@ -79,12 +83,21 @@ const authStack = createSwitchNavigator(
   },
 );
 
+const appDrawer = createDrawerNavigator({
+  Profile: {screen: Profile},
+  Home: {screen: appNavigator}
+},{
+    initialRouteName: 'Home',
+    contentComponent: DrawerScreen,
+    drawerWidth: 300
+})
+
 const Appcontainer = createAppContainer(
   createSwitchNavigator(
     {
       Authloading: Authloadingscreen,
       Auth: authStack,
-      App: appNavigator,
+      App: appDrawer,
     },
     {
       initialRouteName: 'Authloading',
