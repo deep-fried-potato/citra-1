@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     iconStyle: {alignSelf: 'center'},
     description: {marginTop: 10, marginHorizontal: 10},
     media: {alignSelf:'center', width: "90%", height: 100, borderRadius: 10, margin: 10},
-    category: {marginHorizontal: 10, marginVertical: 5}
+    category: {margin: 10}
 });
 
 const multiSelect = {
