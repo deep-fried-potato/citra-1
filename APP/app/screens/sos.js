@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
     itemText:{color:'rgb(150,150,150)', paddingVertical:5},
     sos: {flex: 1, flexDirection:'column'},
     type:{flex:1, flexDirection: 'row', justifyContent:'center', backgroundColor:'grey', borderColor:'red', borderWidth: 2 },
-    // category: {flex: 7, backgroundColor: 'red', justifyContent: 'center'},
-    // voiceInput: {flex: 3, flexDirection: 'row', justifyContent: 'center'},
     mic: {borderColor: 'blue', borderWidth: 2},
 })
 
