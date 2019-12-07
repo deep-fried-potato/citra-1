@@ -40,6 +40,10 @@ target 'APP' do
 
 
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
   target 'APPTests' do
     inherit! :search_paths
     # Pods for testing

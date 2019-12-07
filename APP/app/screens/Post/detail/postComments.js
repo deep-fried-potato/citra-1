@@ -2,6 +2,7 @@ import React from 'react';
 import {AsyncStorage, View, Text, FlatList} from 'react-native';
 import { Container, Header, Content, Item, Icon, Input, Button, Footer,Form, Picker } from 'native-base';
 import Comment from './comment'
+import Config from "react-native-config";
 
 class PostComments extends React.Component {
     constructor(props){
@@ -19,7 +20,7 @@ class PostComments extends React.Component {
 
 
     getUser = (id, userToken) => {
-        fetch(`http://10.0.33.176:3000/common/profileById/${id}`, {
+        fetch(`http://${Config.BASE_URL}:3000/common/profileById/${id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -66,7 +67,7 @@ class PostComments extends React.Component {
         }
         const userToken = await AsyncStorage.getItem('userToken');
         console.info(this.state.post[0]._id);
-        fetch(`http://10.0.33.176:3000/common/commentIssue/${this.state.post[0]._id}`, {
+        fetch(`http://${Config.BASE_URL}:3000/common/commentIssue/${this.state.post[0]._id}`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -122,7 +123,7 @@ class PostComments extends React.Component {
                 <Button onPress = {() => this._addComment()}>
                     <Icon active name='paper-plane' />
                 </Button>
-            </Item> 
+            </Item>
             </Content>
           </Footer>
       </Container>
