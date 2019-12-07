@@ -54,7 +54,7 @@ router.post("/addReward/:issueId",authorityValidate,(req,res)=>{
       buyer_name: authority.name,
       redirect_url: 'http://www.example.com/redirect/',
       send_email: true,
-      webhook: 'http://40116fdd.ngrok.io/authority/confirmPayment',
+      webhook: 'http://139.59.75.22:3000/authority/confirmPayment',
       send_sms: false,
       email: authority.email,
       allow_repeated_payments: false}
