@@ -29,6 +29,7 @@ class VerifyPost extends Component {
         super(props);
         this.state = {
             positive: 0,
+            mediaType:null,
             media: [],
             showAlert:false
         }
@@ -79,18 +80,29 @@ class VerifyPost extends Component {
                         'x-access-token': await AsyncStorage.getItem('userToken')
                     };
                     const {showAlert, ...verifyIssue} = this.state
-                    await session.post('/verifyIssue', {...this.state}, {headers: headers})
+                    await session.post('/verifyIssue', {
+                        'positive':this.state.positive,
+                        'photo': this.state.media[0]
+                    }, {headers: headers})
                         .then(()=>{
+                            console.log('verify data is ',{
+                                'positive':this.state.positive,
+                                'photo': this.state.media[0]
+                            })
                             this.hideAlert()
                             this.props.navigation.navigate()
                         })
                         .catch((error)=>{
+                            console.log('verify data is ',{
+                                'positive':this.state.positive,
+                                'photo': this.state.media[0]
+                            })
                             this.hideAlert()
                             Toast.show({
                                 text:'Something Went Wrong',
                                 type:'danger'
                             })
-                            console.log(error)
+                            console.log(error.response)
                         })
                 })
                 .catch(error =>{
@@ -122,14 +134,6 @@ class VerifyPost extends Component {
                 }}>Click Here To Capture The Image of Resolved Issue</Text>
                 <Icon name="camera" size={40} color="#808080"
                       style={{alignSelf: 'center'}}></Icon>
-                <AwesomeAlert
-                    show={this.state.showAlert}
-                    showProgress={true}
-                    title="All Set"
-                    message="Almost Done"
-                    closeOnTouchOutside={false}
-                    closeOnHardwareBackPress={true}
-                />
             </TouchableOpacity>
         ):(
             this.state.media.map((media, key) => (
@@ -173,6 +177,7 @@ class VerifyPost extends Component {
                                     console.log("positive is ", this.state.positive);
                                 }}
                             />
+
                         </View>
                         {
                             imageBlock
@@ -182,6 +187,14 @@ class VerifyPost extends Component {
                                 <Text style={{color:  'white'}}>Submit</Text>
                             </Button>
                         </View>
+                        <AwesomeAlert
+                            show={this.state.showAlert}
+                            showProgress={true}
+                            title="All Set"
+                            message="Almost Done"
+                            closeOnTouchOutside={false}
+                            closeOnHardwareBackPress={true}
+                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>

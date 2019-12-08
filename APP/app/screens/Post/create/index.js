@@ -172,19 +172,42 @@ class PostCreate extends Component {
                         'Content-Type': 'application/json',
                         'x-access-token': await AsyncStorage.getItem('userToken')
                     };
-                    const {showAlert, ...issue} = this.state
-                    await session.post('/resident/addIssue', {...issue}, {headers: headers})
+
+                    await session.post('/resident/addIssue', {
+                        'title':this.state.title,
+                        'location':{'lat':this.state.location.latitude, 'lng':this.state.location.longitude},
+                        'description':this.state.description,
+                        'photo':this.state.media,
+                        'typeOfIssue':'Civic Issue',
+                        'tags':this.state.typeOfIssue
+                    }, {headers: headers})
                         .then(()=>{
+                            console.log("url data ", {
+                                'title':this.state.title,
+                                'location':{'lat':this.state.location.latitude, 'lng':this.state.location.longitude},
+                                'description':this.state.description,
+                                'photo':this.state.media,
+                                'typeOfIssue':'Civic Issue',
+                                'tags':this.state.typeOfIssue
+                            })
                             this.hideAlert()
                             this.props.navigation.navigate('Home')
                         })
                         .catch((error)=>{
+                            console.log("url data ", {
+                                'title':this.state.title,
+                                'location':{'lat':this.state.location.latitude, 'lng':this.state.location.longitude},
+                                'description':this.state.description,
+                                'photo':this.state.media,
+                                'typeOfIssue':'Civic Issue',
+                                'tags':this.state.typeOfIssue
+                            })
                             this.hideAlert()
                             Toast.show({
                                 text:'Something Went Wrong',
                                 type:'danger'
                             })
-                            console.log(error)
+                            console.log(error.response)
                         })
 
                 })
