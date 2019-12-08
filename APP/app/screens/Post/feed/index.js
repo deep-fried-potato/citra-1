@@ -1,17 +1,17 @@
 import React from 'react';
-import {FlatList,  AsyncStorage, PermissionsAndroid, SafeAreaView, ScrollView} from 'react-native';
+import {FlatList, AsyncStorage, PermissionsAndroid, SafeAreaView, ScrollView} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import Config from "react-native-config"
 import Banner from "../../../components/banner";
 import Item from './feedpost'
 
-class feed extends React.Component{
+class feed extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            feed : [],
+            feed: [],
             lat: null,
             lng: null,
             rad: 5,
@@ -29,8 +29,8 @@ class feed extends React.Component{
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         this.setState({userToken});
-        axios.get('http://'+Config.BASE_URL+':3000/common/getIssues', {
-            params:{
+        axios.get('http://' + Config.BASE_URL + ':3000/common/getIssues', {
+            params: {
                 // lat: this.state.lat ,
                 // lng: this.state.lng ,
                 lat: 17.399320,
@@ -41,16 +41,16 @@ class feed extends React.Component{
                 'x-access-token': userToken,
             }
         })
-        .then(resjson => {
-            // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
-            //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
-            // console.log(resjson['data'])
-            this.setState({feed: Object.values(resjson.data) , refreshing: false})
-        })
-        .catch((err,res) => {
-            // console.error(err)
-            this.setState({refreshing:false})
-        })
+            .then(resjson => {
+                // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
+                //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
+                // console.log(resjson['data'])
+                this.setState({feed: Object.values(resjson.data), refreshing: false})
+            })
+            .catch((err, res) => {
+                // console.error(err)
+                this.setState({refreshing: false})
+            })
     }
 
     _getCurrentPositionAsync = () => {
@@ -59,9 +59,9 @@ class feed extends React.Component{
         }).then((position) => {
             return position;
         })
-        .catch((err) => {
-            console.log(err);
-        });
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     _setCurrentLocation = async () => {
@@ -72,39 +72,39 @@ class feed extends React.Component{
                 let position = await this._getCurrentPositionAsync();
                 this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude})
             } else {
-              console.log('Location permission denied');
+                console.log('Location permission denied');
             }
-          } catch (err) {
+        } catch (err) {
             console.warn(err);
-          }
+        }
     }
 
 
     _feedByType = (issueType) => {
         let filterByType = (post) => {
-            if(post.typeOfIssue === issueType){
+            if (post.typeOfIssue === issueType) {
                 return post
             }
         }
         let data = this.state.feed.filter(filterByType);
-        this.setState({'feed':data});
+        this.setState({'feed': data});
     }
 
     _removeFromFeed = (issueId) => {
         let removePostById = (post) => {
-            if(post._id !== issueId){
+            if (post._id !== issueId) {
                 return post
             }
         }
         let data = this.state.feed.filter(removePostById);
-        this.setState({'feed':data});
+        this.setState({'feed': data});
     }
 
 
     handlerefresh = () => {
-        this.setState({refreshing : true}, async () => {
-        await this._setCurrentLocation();
-        await this._fetchfeed()
+        this.setState({refreshing: true}, async () => {
+            await this._setCurrentLocation();
+            await this._fetchfeed()
         })
     }
 
@@ -115,22 +115,22 @@ class feed extends React.Component{
     }
 
 
-    render(){
+    render() {
         // console.log(this.state.feed);
-        return(
+        return (
             <SafeAreaView>
-                <ScrollView>
-                    <Banner name="Feed" />
-                        <FlatList
-                            data = {this.state.feed}
-                            renderItem = {({item}) => <Item card = {item} postpage = {this._postpage}
-                                                            latitude={this.state.lat} longitude={this.state.lng} token={this.state.userToken}
-                                                            _feedByType={this._feedByType} _removeFromFeed={this._removeFromFeed}/>}
-                            keyExtractor = {item => item._id}
-                            refreshing = {this.state.refreshing}
-                            onRefresh = {this.handlerefresh}
-                        />
-                </ScrollView>
+                <Banner name="Feed"/>
+                <FlatList
+                    data={this.state.feed}
+                    renderItem={({item}) => <Item card={item} postpage={this._postpage}
+                                                  latitude={this.state.lat} longitude={this.state.lng}
+                                                  token={this.state.userToken}
+                                                  _feedByType={this._feedByType}
+                                                  _removeFromFeed={this._removeFromFeed}/>}
+                    keyExtractor={item => item._id}
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.handlerefresh}
+                />
             </SafeAreaView>
         );
     }

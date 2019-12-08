@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import {View, SafeAreaView, Image, TouchableOpacity, ScrollView} from "react-native";
+import {View, SafeAreaView, Image, TouchableOpacity, ScrollView, PermissionsAndroid, AsyncStorage} from "react-native";
 import {
     Container,
     Textarea,
@@ -18,46 +18,46 @@ import {
     Header
 } from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
-import Banner from "../../components/banner";
+import AwesomeAlert from 'react-native-awesome-alerts';
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import Config from "react-native-config";
 import Geolocation from '@react-native-community/geolocation';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {styles, multiSelect} from "./styles";
-import post from "../../api/post"
+import session from '../../../api/session'
+import {RNS3} from 'react-native-aws3';
+
+const options = {
+    keyPrefix: Config.AWS_S3_FOLDER,
+    bucket: Config.AWS_S3_BUCKET,
+    region: Config.AWS_REGION,
+    accessKey: Config.AWS_ACCESS_KEY,
+    secretKey: Config.AWS_SECRET_KEY,
+    successActionStatus: 201
+}
 
 const items = [
     // this is the parent or 'item'
     {
         name: 'Garbage',
         id: 1,
-        // these are the children or 'sub items'
-        children: [
-            {
-                name: 'No Dustbin',
-                id: 10,
-            },
-            {
-                name: 'Litter',
-                id: 11,
-            },
-        ],
     },
     {
         name: 'Water',
         id: 2,
-        // these are the children or 'sub items'
-        children: [
-            {
-                name: 'Sewage Leakage',
-                id: 20,
-            },
-            {
-                name: 'Leaking Taps',
-                id: 21,
-            },
-        ],
-    }
+    },
+    {
+        name: 'Pest',
+        id: 3,
+    },
+    {
+        name: 'Infrastructure',
+        id: 4,
+    },
+    {
+        name: 'Other',
+        id: 5,
+    },
 ];
 
 
@@ -69,29 +69,64 @@ class PostCreate extends Component {
             description: null,
             media: [],
             mediaType: null,
-            selectedItems: [],
+            typeOfIssue: [],
             location: null,
+            showAlert: false
         };
         this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this)
     }
 
-    componentDidMount(): void {
-        Geolocation.watchPosition(position => {
+    showAlert = () => {
+        this.setState({
+            showAlert: true
+        });
+    };
+
+    hideAlert = () => {
+        this.setState({
+            showAlert: false
+        });
+    };
+
+    _getCurrentPositionAsync = () => {
+        return new Promise(function (resolve, reject) {
+            Geolocation.getCurrentPosition(resolve, reject);
+        }).then((position) => {
+            return position;
+        })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    _setCurrentLocation = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You are accessing the location');
+                let position = await this._getCurrentPositionAsync();
+                console.log(position)
                 this.setState({
                     location: {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
-                    },
-                    error: null
-                });
-            },
-            (error) => this.setState({error: error.message}),
-            {enableHighAccuracy: true, timeout: 200000, maximumAge: 0});
+                    }
+                })
+            } else {
+                console.log('Location permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+    async componentDidMount(): void {
+        await this._setCurrentLocation();
     }
 
 
-    onSelectedItemsChange(selectedItems) {
-        this.setState({selectedItems});
+    onSelectedItemsChange(typeOfIssue) {
+        this.setState({typeOfIssue});
     }
 
     handleCamera() {
@@ -115,15 +150,45 @@ class PostCreate extends Component {
         });
     };
 
-    handlePost = () => post.createIssue(...this.state);
+    handlePost = () => {
+        var mediaUrls = []
+        var global = this
+        this.state.media.map(
+            async file => await RNS3.put({
+                uri: file,
+                name: file.replace(/^.*[\\\/]/, ''),
+                type: this.state.mediaType
+            }, options)
+                .then(response => {
+                    global.showAlert()
+                    mediaUrls.push(response.body.postResponse.location)
+                })
+                .then(() => {
+                    this.setState({media: mediaUrls})
+                    console.log("metrics are ", this.state)
+                })
+                .then(() => {
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'x-access-token': AsyncStorage.getItem('userToken')
+                    };
+                    session.post('/resident/addIssue', {...this.state}, {headers: headers})
+                    this.props.navigation.navigate('Home')
+                })
+                .catch(error => console.log("error is ", error))
+        );
+    };
 
     render() {
+        const {goBack} = this.props.navigation;
         return (
             <SafeAreaView style={styles.safeAreaContainer}>
                 <Container>
                     <Header style={styles.banner}>
                         <Left>
-                            <Icon color="#000" size={20} name="arrow-left"></Icon>
+                            <TouchableOpacity onPress={() => goBack()}>
+                                <Icon color="#000" size={20} name="arrow-left"></Icon>
+                            </TouchableOpacity>
                         </Left>
                         <Body/>
                         <Right>
@@ -131,6 +196,14 @@ class PostCreate extends Component {
                         </Right>
                     </Header>
                     <ScrollView>
+                        <AwesomeAlert
+                            show={this.state.showAlert}
+                            showProgress={false}
+                            title="Almost Done"
+                            message="I have a message for you!"
+                            closeOnTouchOutside={false}
+                            closeOnHardwareBackPress={true}
+                        />
                         <Form>
                             <Item>
                                 <Input
@@ -144,13 +217,13 @@ class PostCreate extends Component {
                                     items={items}
                                     modalWithTouchable
                                     modalWithSafeAreaView
-                                    uniqueKey="id"
+                                    uniqueKey="name"
                                     subKey="children"
                                     selectText="Choose Issues..."
                                     showDropDowns={true}
-                                    readOnlyHeadings={true}
+                                    readOnlyHeadings={false}
                                     onSelectedItemsChange={this.onSelectedItemsChange}
-                                    selectedItems={this.state.selectedItems}
+                                    selectedItems={this.state.typeOfIssue}
                                     itemNumberOfLines={1}
                                     selectLabelNumberOfLines={1}
                                     styles={multiSelect}/>
@@ -158,7 +231,7 @@ class PostCreate extends Component {
 
                             <Textarea
                                 value={this.state.description}
-                                onChangeText={(description)=>this.setState({description})}
+                                onChangeText={(description) => this.setState({description})}
                                 style={styles.description}
                                 rowSpan={10}
                                 placeholder="What issue are you facing?"/>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {AsyncStorage, View, Text, FlatList, TouchableOpacity} from 'react-native';
 import axios from 'axios';
-import {styles} from "../../postCreate/styles";
+import {styles} from "../create/styles";
 import {Body, Header, Left, Right} from "native-base";
 import Icon from "react-native-vector-icons/Feather";
 
@@ -22,10 +22,11 @@ class PostDetail extends React.Component {
     }
 
     render() {
+        const {goBack} = this.props.navigation;
         return(
             <Header style={styles.banner}>
                 <Left>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => goBack()}>
                         <Icon color="#000" size={20} name="arrow-left"></Icon>
                     </TouchableOpacity>
                 </Left>

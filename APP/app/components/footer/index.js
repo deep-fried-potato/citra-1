@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
-import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {createStackNavigator} from 'react-navigation-stack';
 import TabBarComponent from './footer';
 import Icon from 'react-native-vector-icons/Feather';
 import Home from '../../screens/home/';
 import Search from '../../screens/search/search';
-import PostCreate from '../../screens/postCreate/';
+import PostCreate from '../../screens/Post/create/index';
 import Notifications from '../../screens/notifications';
 import Sos from '../../screens/sos';
 import Feedscreen from '../../screens/Post/feed/index';
-import {Body, Header, Left, Right, Thumbnail, Button, Text} from 'native-base';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   banner: {backgroundColor: 'white'},

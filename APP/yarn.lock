@@ -5488,6 +5488,13 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-awesome-alerts@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-alerts/-/react-native-awesome-alerts-1.3.0.tgz#a4cc825471d295e8cfcd1e4ece06e549bc05e2af"
+  integrity sha512-yGFiho0/JjZI8walp+ZNj8MVAtefgpfrlsA0ToTVDDXm0/iy3wr2PQOhL6jfHNx5E8CyXV7zEUsGJzMFMEJG4g==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-aws3@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/react-native-aws3/-/react-native-aws3-0.0.9.tgz#116cd62998611e499e90fcf0f1ba3d00662dca80"
@@ -5614,6 +5621,11 @@ react-native-sectioned-multi-select@^0.7.3:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.7.6.tgz#d45f067a29b0200a481812b6a255a996adeb3897"
   integrity sha512-XO4cxYN6s1Dfi28GI3aIruZbNWkS02S7GB99A1biu6BQlZWvvKAnnglhlvhqElkLyIhMMfLCsAf4e5pWBfWOqA==
+
+react-native-simple-radio-button@^2.7.4:
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.4.tgz#86e2dbe8af9e6bf60eee088f60466f7a975e7758"
+  integrity sha512-QOZNmJUn0ViBGU+at7wAG/uGzd5PfXi0kMHr9lfTCLXknW/f9f2fOVjxjdHvOCdf/zA/eMJBjGjtusSDzQf1+w==
 
 react-native-snap-carousel@^3.8.4:
   version "3.8.4"

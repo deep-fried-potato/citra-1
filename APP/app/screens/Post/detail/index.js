@@ -3,7 +3,7 @@ import Timeline from 'react-native-timeline-flatlist'
 import {TouchableOpacity, AsyncStorage, View, Text, FlatList, SafeAreaView, ScrollView} from 'react-native';
 import axios from 'axios';
 import {Container, Header, Content, Left, Body, Right, Button} from 'native-base';
-import {styles} from "../../postCreate/styles";
+import {styles} from "../create/styles";
 import Icon from "react-native-vector-icons/Feather";
 
 class PostDetail extends React.Component {
@@ -69,12 +69,13 @@ class PostDetail extends React.Component {
 
     render() {
         console.info(this.state)
+        const {goBack} = this.props.navigation;
         return (
             <SafeAreaView>
                 <ScrollView>
                     <Header style={styles.banner}>
                         <Left>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => goBack()}>
                                 <Icon color="#000" size={20} name="arrow-left"></Icon>
                             </TouchableOpacity>
                         </Left>

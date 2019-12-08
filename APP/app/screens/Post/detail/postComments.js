@@ -3,10 +3,8 @@ import {AsyncStorage, View, Text, FlatList, TouchableOpacity} from 'react-native
 import {
     Container,
     Header,
-    Content,
     Item,
     Input,
-    Button,
     Footer,
     Form,
     Picker,
@@ -17,7 +15,8 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import Comment from './comment'
 import Config from "react-native-config";
-import {styles} from "../../postCreate/styles";
+import {styles} from "../create/styles";
+import localStyles from "./styles"
 
 class PostComments extends React.Component {
     constructor(props) {
@@ -106,11 +105,12 @@ class PostComments extends React.Component {
     }
 
     render() {
+        const {goBack} = this.props.navigation;
         return (
             <Container>
                 <Header style={styles.banner}>
                     <Left>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => goBack()}>
                             <Icon color="#000" size={20} name="arrow-left"></Icon>
                         </TouchableOpacity>
                     </Left>
@@ -121,7 +121,7 @@ class PostComments extends React.Component {
                                 note
                                 mode="dropdown"
                                 style={{width: 120}}
-                                iosIcon={<Icon name="arrow-dropdown-circle" style={{color: "#007aff", fontSize: 25}}/>}
+                                iosIcon={<Icon name="chevron-down" style={{color: "#007aff", fontSize: 25}}/>}
                                 selectedValue={this.state.selected}
                                 onValueChange={this.onValueChange}
                             >
@@ -134,22 +134,20 @@ class PostComments extends React.Component {
                 <FlatList
                     data={this.state.data}
                     renderItem={(item) => <Comment comment={item} userToken={this.state.userToken}/>}
-                    keyExtractor={item => item._id}
-                />
+                    keyExtractor={item => item._id}/>
 
-                <Footer style={{flex:0, flexDirection:'row', backgroundColor:'white'}}>
-                    <View style={{flex:0.9}}>
-                        <Item rounded style={{flex:1,margin:6}}>
+                <Footer style={localStyles.postDetailFooter}>
+                    <View style={localStyles.commentBox}>
+                        <Item rounded style={localStyles.commentInput}>
                             <Input
-                                style={{borderWidth:0}}
                                 placeholder='Add Comment'
-                                onChangeText = {text => this.setState({'comment':text})}
-                                value = {this.state.comment}/>
+                                onChangeText={text => this.setState({'comment': text})}
+                                value={this.state.comment}/>
                         </Item>
                     </View>
-                    <View style={{flex:0.1, justifyContent:'center'}}>
-                        <TouchableOpacity onPress = {() => this._addComment()}>
-                            <Icon size={30} color="blue" style={{alignSelf:'center'}} name='arrow-right-circle' />
+                    <View style={localStyles.commentButton}>
+                        <TouchableOpacity onPress={() => this._addComment()}>
+                            <Icon size={30} color="blue" style={{alignSelf: 'center'}} name='arrow-right-circle'/>
                         </TouchableOpacity>
                     </View>
                 </Footer>
