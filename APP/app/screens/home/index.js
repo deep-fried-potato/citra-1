@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, View, Text, AsyncStorage} from 'react-native';
+import {ScrollView, View, Text, AsyncStorage, Platform, Linking} from 'react-native';
 import {Container, Button, Content} from 'native-base';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -26,27 +26,43 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    Geolocation.watchPosition(
-      position => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-          error: null,
+      console.log('INDIA')
+      if (Platform.OS === 'android') {
+        console.log('ANDR')
+        Linking.getInitialURL().then(url => {
+          console.log(url)
+          this.navigate(url);
         });
-      },
-      error => this.setState({error: error.message}),
-      {enableHighAccuracy: true, timeout: 200000, maximumAge: 0},
-    );
+      } else {
+          Linking.addEventListener('url', this.handleOpenURL);
+        }
+      }
+      
+      componentWillUnmount() { // C
+        Linking.removeEventListener('url', this.handleOpenURL);
+      }
+  
+      handleOpenURL = (event) => { // D
+        this.navigate(event.url);
+      }
+  
+      navigate = (url) => {
+        if(url){
+        const { navigate } = this.props.navigation;
+        const route = url.replace(/.*?:\/\//g, '');
+        const id = route.match(/\/([^\/]+)\/?$/)[1];
+        const routeName = route.split('/')[0];
+        console.log('routeName', routeName);
+        if (id){
+          navigate('SOSinfo', {id: id});
+        }
+                } // E
+      };
 
-    const radius = 10;
     // this.setState({
     //     markers: await getIssues(this.state.region.latitude, this.state.region.longitude, radius).then(response => response.data)
     // })
-  }
+  
 
   async componentDidUpdate(prevState) {
     const radius = 10;

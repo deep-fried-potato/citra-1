@@ -17,6 +17,8 @@ import PostMedia from '../screens/Post/detail/postMedia';
 import PostComments from '../screens/Post/detail/postMedia';
 import Profile from '../screens/profile/editProfile';
 import DrawerScreen  from '../screens/drawer'
+import sosinfoscreen from '../screens/SOSinfo';
+
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const postDetailNavigator = createMaterialBottomTabNavigator(
@@ -58,17 +60,19 @@ const postDetailNavigator = createMaterialBottomTabNavigator(
 
 const appNavigator = createStackNavigator(
   {
+    feedscreen: {
+      screen: Feedscreen,
+    },
+    SOSinfo: {  
+      screen: sosinfoscreen,
+    },
     FooterNavigator,
     postDetailNavigator,
-    feedscreen: {screen: Feedscreen},
-    // postscreen: {screen: Postscreen},
   },
   {
-    defaultNavigationOptions: {
-      header: null,
+      headerMode: 'none',
       initialRouteName: 'FooterNavigator',
     },
-  },
 );
 
 const authStack = createSwitchNavigator(
@@ -84,8 +88,13 @@ const authStack = createSwitchNavigator(
 );
 
 const appDrawer = createDrawerNavigator({
-  Profile: {screen: Profile},
-  Home: {screen: appNavigator}
+  Home: {
+    screen: appNavigator,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  
 },{
     initialRouteName: 'Home',
     contentComponent: DrawerScreen,
@@ -95,14 +104,20 @@ const appDrawer = createDrawerNavigator({
 const Appcontainer = createAppContainer(
   createSwitchNavigator(
     {
+      App: {
+        screen: appDrawer,
+      },
       Authloading: Authloadingscreen,
       Auth: authStack,
-      App: appDrawer,
     },
     {
       initialRouteName: 'Authloading',
     },
   ),
+  // appNavigator
 );
 
-export default Appcontainer;
+const prefix = 'http://'
+const MainApp = () => <Appcontainer uriPrefix={prefix} />
+
+export default MainApp;

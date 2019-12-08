@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList,  AsyncStorage, PermissionsAndroid} from 'react-native';
+import {FlatList,  AsyncStorage ,PermissionsAndroid} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import Config from "react-native-config"
@@ -30,10 +30,10 @@ class feed extends React.Component{
         this.setState({userToken});
         axios.get('http://'+Config.BASE_URL+':3000/common/getIssues', {
             params:{
-                // lat: this.state.lat ,
-                // lng: this.state.lng ,
-                lat: 17.399320,
-                lng: 78.521402,
+                lat: this.state.lat ,
+                lng: this.state.lng ,
+                // lat: 17.399320,
+                // lng: 78.521402,
                 rad: this.state.rad,
             },
             headers: {
@@ -69,6 +69,7 @@ class feed extends React.Component{
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('You are accessing the location');
                 let position = await this._getCurrentPositionAsync();
+                console.log('position', position)
                 this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude})
             } else {
               console.log('Location permission denied');
