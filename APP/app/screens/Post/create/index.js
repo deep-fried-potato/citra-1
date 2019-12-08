@@ -15,7 +15,8 @@ import {
     Right,
     Button,
     Text,
-    Header
+    Header,
+    Toast
 } from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -152,7 +153,7 @@ class PostCreate extends Component {
 
     handlePost = () => {
         var mediaUrls = []
-        var global = this
+        this.showAlert()
         this.state.media.map(
             async file => await RNS3.put({
                 uri: file,
@@ -160,22 +161,40 @@ class PostCreate extends Component {
                 type: this.state.mediaType
             }, options)
                 .then(response => {
-                    global.showAlert()
                     mediaUrls.push(response.body.postResponse.location)
                 })
                 .then(() => {
                     this.setState({media: mediaUrls})
                     console.log("metrics are ", this.state)
                 })
-                .then(() => {
+                .then(async () => {
                     const headers = {
                         'Content-Type': 'application/json',
-                        'x-access-token': AsyncStorage.getItem('userToken')
+                        'x-access-token': await AsyncStorage.getItem('userToken')
                     };
-                    session.post('/resident/addIssue', {...this.state}, {headers: headers})
-                    this.props.navigation.navigate('Home')
+                    const {showAlert, ...issue} = this.state
+                    await session.post('/resident/addIssue', {...issue}, {headers: headers})
+                        .then(()=>{
+                            this.hideAlert()
+                            this.props.navigation.navigate('Home')
+                        })
+                        .catch((error)=>{
+                            this.hideAlert()
+                            Toast.show({
+                                text:'Something Went Wrong',
+                                type:'danger'
+                            })
+                            console.log(error)
+                        })
+
                 })
-                .catch(error => console.log("error is ", error))
+                .catch(error =>{
+                    Toast.show({
+                        text:'Something Went Wrong',
+                        type:'danger'
+                    })
+                    console.log("error is ", error)
+                })
         );
     };
 
@@ -198,9 +217,9 @@ class PostCreate extends Component {
                     <ScrollView>
                         <AwesomeAlert
                             show={this.state.showAlert}
-                            showProgress={false}
-                            title="Almost Done"
-                            message="I have a message for you!"
+                            showProgress={true}
+                            title="Loading Images"
+                            message="Almost Done!"
                             closeOnTouchOutside={false}
                             closeOnHardwareBackPress={true}
                         />
