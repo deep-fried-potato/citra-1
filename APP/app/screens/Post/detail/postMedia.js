@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {AsyncStorage, View, Text, Image, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
 import axios from 'axios';
 import {styles} from "../create/styles";
 import {Body, Header, Left, Right} from "native-base";
@@ -9,7 +9,7 @@ class PostDetail extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            post: []
+            media: []
         }
     }
 
@@ -17,14 +17,15 @@ class PostDetail extends React.Component {
         await console.log(this.state.post[0].photo)
     }
     componentDidMount = async () => {
-        await this.setState({'post': this.props.navigation.getParam('post')})
-        await this._getMdeia();
+        let media = this.props.navigation.getParam('post')[0]['photo']
+        this.setState({media})
     }
 
     render() {
         const {goBack} = this.props.navigation;
         return(
-            <Header style={styles.banner}>
+            <SafeAreaView>
+                <Header style={styles.banner}>
                 <Left>
                     <TouchableOpacity onPress={() => goBack()}>
                         <Icon color="#000" size={20} name="arrow-left"></Icon>
@@ -33,6 +34,19 @@ class PostDetail extends React.Component {
                 <Body/>
                 <Right/>
             </Header>
+                {
+                            (this.state.media.length != 0) && (
+                                this.state.media.map((media, key) => (
+                                    <Image
+                                        key={key}
+                                        source={{uri: media}}
+                                        style={{alignSelf:'center', width: "90%", height: '60%', borderRadius: 10, margin: 10}}
+                                    />)
+                                )
+                            )
+                        }
+            </SafeAreaView>
+        
         );
     }
 }

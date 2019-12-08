@@ -125,6 +125,7 @@ class feed extends React.Component {
                     data={this.state.feed}
                     renderItem={({item}) => <Item card={item} postpage={this._postpage}
                                                   latitude={this.state.lat} longitude={this.state.lng}
+                                                  image={item.photo[0]}
                                                   token={this.state.userToken}
                                                   _feedByType={this._feedByType}
                                                   _removeFromFeed={this._removeFromFeed}/>}

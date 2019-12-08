@@ -5,28 +5,19 @@ import Config from 'react-native-config';
 export default class Sosinfo extends Component{
     constructor(props){
         super(props)
-        this.state = {
-            info: []
-        }
+        this.state = {}
     }
 
     fetchSOS = async (sosId) => {
-        let userToken = await AsyncStorage.getItem('userToken');
-        fetch(`http://`+Config.BASE_URL+`:3000/common/viewSOS/${sosId}`, {
+        let userToken = AsyncStorage.getItem('userToken');
+        fetch(`http://'+Config.BASE_URL+':3000/auth/residentLogin/${sosId}`, {
             method:'GET',
             headers:{
                 'x-access-token': userToken,
             }
         })
-        .then(res => {
-            console.log('OOOOO');
-            console.log(res)
-            return res.text();
-        })
-        .then(res => {
-            console.log(res)
-            this.setState({info: res})
-        })
+        .then(res => res.json())
+        .then(res => console.log(res))
         .catch(err => console.err)
     }
 
@@ -36,7 +27,7 @@ export default class Sosinfo extends Component{
     }
 
     render(){
-        console.info(this.state.info)
+        
         return (
             <Text>Sos</Text>
         )

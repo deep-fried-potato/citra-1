@@ -186,7 +186,6 @@ class PostCreate extends Component {
                             })
                             console.log(error)
                         })
-
                 })
                 .catch(error =>{
                     Toast.show({
