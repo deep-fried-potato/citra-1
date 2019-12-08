@@ -135,7 +135,7 @@ router.post("/SaveMySoul",residentValidate,(req,res)=>{
   }).then((newsosalert)=>{
     client.messages
           .create({
-             body: 'Message new testing just for fun ',
+             body: 'A person near you has issued an SOS alert! Click to learn more http://citra.com/SOS/'+newsosalert._id,
              from: '+14843417214',
              to: getNearbyUsers(req.body.location)
            })

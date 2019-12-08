@@ -15,6 +15,12 @@ var residentRoutes = require('./routes/residentRoutes')
 var authorityRoutes = require('./routes/authorityRoutes')
 var commonRoutes = require("./routes/commonRoutes")
 
+app.use((req,res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+});
+
 app.use("/auth",auth)
 app.use("/resident",residentRoutes)
 app.use("/authority",authorityRoutes)

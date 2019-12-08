@@ -52,7 +52,7 @@ router.post("/addReward/:issueId",authorityValidate,(req,res)=>{
       amount: req.body.amount,
       phone: '9999999999',
       buyer_name: authority.name,
-      redirect_url: 'http://www.example.com/redirect/',
+      redirect_url: 'http://test.instamojo.com',
       send_email: true,
       webhook: 'http://139.59.75.22:3000/authority/confirmPayment',
       send_sms: false,
