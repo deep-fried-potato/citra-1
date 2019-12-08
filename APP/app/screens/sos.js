@@ -21,10 +21,25 @@ const styles = StyleSheet.create({
 const categories = ['ambulance', 'pulse', 'injection-syringe', 'stethoscope', 'test-tube', 'paralysis-disability']
 
 class Sos extends Component {
+
+
+  _signOutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('Auth');
+  };
+
+  _viewfeed = async () => {
+    await this.props.navigation.navigate('feedscreen');
+  };
+
+  toggleDrawer = async () => {
+    await this.props.navigation.toggleDrawer();
+  }
+  
     render() {
         return (
             <Container>
-                <Banner name="SOS"></Banner>
+                <Banner name="SOS" _toggledrawer={this.toggleDrawer} userName={'Siddhant'}></Banner>
                 <ScrollView>
                     <View style={styles.container}>
                         {

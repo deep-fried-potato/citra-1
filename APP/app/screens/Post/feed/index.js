@@ -1,16 +1,17 @@
 import React from 'react';
-import {FlatList,  AsyncStorage ,PermissionsAndroid} from 'react-native';
+import {FlatList, AsyncStorage, PermissionsAndroid, SafeAreaView, ScrollView} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import Config from "react-native-config"
+import Banner from "../../../components/banner";
 import Item from './feedpost'
 
-class feed extends React.Component{
+class feed extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            feed : [],
+            feed: [],
             lat: null,
             lng: null,
             rad: 5,
@@ -58,9 +59,9 @@ class feed extends React.Component{
         }).then((position) => {
             return position;
         })
-        .catch((err) => {
-            console.log(err);
-        });
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     _setCurrentLocation = async () => {
@@ -72,39 +73,39 @@ class feed extends React.Component{
                 console.log('position', position)
                 this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude})
             } else {
-              console.log('Location permission denied');
+                console.log('Location permission denied');
             }
-          } catch (err) {
+        } catch (err) {
             console.warn(err);
-          }
+        }
     }
 
 
     _feedByType = (issueType) => {
         let filterByType = (post) => {
-            if(post.typeOfIssue === issueType){
+            if (post.typeOfIssue === issueType) {
                 return post
             }
         }
         let data = this.state.feed.filter(filterByType);
-        this.setState({'feed':data});
+        this.setState({'feed': data});
     }
 
     _removeFromFeed = (issueId) => {
         let removePostById = (post) => {
-            if(post._id !== issueId){
+            if (post._id !== issueId) {
                 return post
             }
         }
         let data = this.state.feed.filter(removePostById);
-        this.setState({'feed':data});
+        this.setState({'feed': data});
     }
 
 
     handlerefresh = () => {
-        this.setState({refreshing : true}, async () => {
-        await this._setCurrentLocation();
-        await this._fetchfeed()
+        this.setState({refreshing: true}, async () => {
+            await this._setCurrentLocation();
+            await this._fetchfeed()
         })
     }
 
@@ -115,17 +116,23 @@ class feed extends React.Component{
     }
 
 
-    render(){
-        return(
-            <FlatList
-                data = {this.state.feed}
-                renderItem = {({item}) => <Item card = {item} postpage = {this._postpage}
-                                latitude={this.state.lat} longitude={this.state.lng} token={this.state.userToken}
-                                _feedByType={this._feedByType} _removeFromFeed={this._removeFromFeed}/>}
-                keyExtractor = {item => item._id}
-                refreshing = {this.state.refreshing}
-                onRefresh = {this.handlerefresh}
-            />
+    render() {
+        // console.log(this.state.feed);
+        return (
+            <SafeAreaView>
+                <Banner name="Feed"/>
+                <FlatList
+                    data={this.state.feed}
+                    renderItem={({item}) => <Item card={item} postpage={this._postpage}
+                                                  latitude={this.state.lat} longitude={this.state.lng}
+                                                  token={this.state.userToken}
+                                                  _feedByType={this._feedByType}
+                                                  _removeFromFeed={this._removeFromFeed}/>}
+                    keyExtractor={item => item._id}
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.handlerefresh}
+                />
+            </SafeAreaView>
         );
     }
 }

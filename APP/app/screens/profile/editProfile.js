@@ -8,7 +8,7 @@ import Modal from 'react-native-modal'
 
 
 var BUTTONS = [
-    { text: "Email", icon: "analytics", iconColor: "#f42ced" },
+    // { text: "Email", icon: "analytics", iconColor: "#f42ced" },
     { text: "Contact number", icon: "aperture", iconColor: "#ea943b" },
     { text: "Emergency Contact", icon: "analytics", iconColor: "#f42ced" },
     { text: "Blood Group", icon: "aperture", iconColor: "#ea943b" },
@@ -19,7 +19,6 @@ var BUTTONS = [
 
 var DESTRUCTIVE_INDEX = 5;
 var CANCEL_INDEX = 6;
-
 class EditProfile extends Component {
     static navigationOptions = {
         title:'Profile',
@@ -80,7 +79,7 @@ class EditProfile extends Component {
             .then(res=>{
                 console.log(res.json())
                 this.toggleModal()
-                alert('Updated Info')
+                alert('Information Updated')
                 return
             })
             .catch(err => console.log(err))
@@ -123,11 +122,11 @@ class EditProfile extends Component {
                                     return
                                 }
                                 else{       
-                                if(BUTTONS[buttonIndex]['text'] === 'Email'){
-                                    this.setState({selected:0})
-                                    this.toggleModal()
-                                }
-                                else if(BUTTONS[buttonIndex]['text'] === 'Contact number'){
+                                // if(BUTTONS[buttonIndex]['text'] === 'Email'){
+                                //     this.setState({selected:0})
+                                //     this.toggleModal()
+                                // }
+                                if(BUTTONS[buttonIndex]['text'] === 'Contact number'){
                                     this.setState({selected:1})
                                     this.toggleModal()
                                 }
