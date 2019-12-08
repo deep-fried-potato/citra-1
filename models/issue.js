@@ -10,10 +10,9 @@ var mongoose = require('mongoose');
       type:String,
       required:true
     },
-    photo: {
-      type:String,
-      required:true
-    },
+    photo: [{
+      type:String
+    }],
     typeOfIssue: {
       type:String,
       required:true
