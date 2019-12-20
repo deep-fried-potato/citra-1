@@ -116,7 +116,7 @@ const Appcontainer = createAppContainer(
         screen: appDrawer,
       },
       Authloading: Authloadingscreen,
-      Auth: authStack,
+      Auth: authStack,\
     },
     {
         initialRouteName: 'Authloading',

@@ -28,6 +28,7 @@ class VerifyPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id:0,
             positive: 0,
             mediaType:null,
             media: [],
@@ -82,7 +83,9 @@ class VerifyPost extends Component {
                     const {showAlert, ...verifyIssue} = this.state
                     await session.post('/verifyIssue', {
                         'positive':this.state.positive,
-                        'photo': this.state.media[0]
+                        'photo': this.state.media[0],
+                        '_id':this.props.navigation.getParam('post')[0]['_id']
+                        
                     }, {headers: headers})
                         .then(()=>{
                             console.log('verify data is ',{
