@@ -22,35 +22,35 @@ class feed extends React.Component {
 
     _postpage = (id) => {
         const postDetail = this.state.feed.filter((item) => item._id === id)
-        // console.log(postDetail);
+        console.log(this.props.navigation);
         this.props.navigation.navigate('postDetailNavigator', {post: postDetail});
     }
 
     _fetchfeed = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         this.setState({userToken});
-        axios.get('http://' + Config.BASE_URL + ':3000/common/getIssues', {
-            params: {
-                // lat: this.state.lat ,
-                // lng: this.state.lng ,
-                lat: 17.399320,
-                lng: 78.521402,
+        axios.get('http://'+Config.BASE_URL+':3000/common/getIssues', {
+            params:{
+                lat: this.state.lat ,
+                lng: this.state.lng ,
+                // lat: 17.399320,
+                // lng: 78.521402,
                 rad: this.state.rad,
             },
             headers: {
                 'x-access-token': userToken,
             }
         })
-            .then(resjson => {
-                // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
-                //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
-                // console.log(resjson['data'])
-                this.setState({feed: Object.values(resjson.data), refreshing: false})
-            })
-            .catch((err, res) => {
-                // console.error(err)
-                this.setState({refreshing: false})
-            })
+        .then(resjson => {
+            // ["tags", "addedDate", "upvotes", "assignedAuthority", "_id", "positiveVerifiers", "negativeVerifiers", "title", "description", "photo",
+            //  "typeOfIssue", "location", "plusCode", "addedBy", "residentComments", "authorityComments", "__v", "completionStatus", "verifications"]
+            // console.log(resjson['data'])
+            this.setState({feed: resjson.data , refreshing: false})
+        })
+        .catch((err,res) => {
+            // console.error(err)
+            this.setState({refreshing:false})
+        })
     }
 
     _getCurrentPositionAsync = () => {
@@ -70,6 +70,7 @@ class feed extends React.Component {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('You are accessing the location');
                 let position = await this._getCurrentPositionAsync();
+                console.log('position', position)
                 this.setState({'lat': position.coords.latitude, 'lng': position.coords.longitude})
             } else {
                 console.log('Location permission denied');
@@ -124,6 +125,7 @@ class feed extends React.Component {
                     data={this.state.feed}
                     renderItem={({item}) => <Item card={item} postpage={this._postpage}
                                                   latitude={this.state.lat} longitude={this.state.lng}
+                                                  image={item.photo[0]}
                                                   token={this.state.userToken}
                                                   _feedByType={this._feedByType}
                                                   _removeFromFeed={this._removeFromFeed}/>}

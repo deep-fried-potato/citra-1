@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Config from "react-native-config";
 import styles from './styles'
 
-const uri = 'https://miro.medium.com/max/1914/1*gyr5EOhxd17hPf5SY_KXYA.jpeg';
+
 
 class Item extends React.Component {
 
@@ -103,7 +103,7 @@ class Item extends React.Component {
         this._parseDate();
         this._parseDistance();
         this._getUserFromStorageAsync();
-        this.setState({'total_upvote': this.props.card.upvotes.length})
+        this.setState({'total_upvote': this.props.card.upvotes.length, 'image': this.props.image})
     }
 
 // PostDetail
@@ -129,7 +129,7 @@ class Item extends React.Component {
             <View style={styles.card}>
                 <Card>
                     <CardItem cardBody>
-                        <Image source={{uri: uri}} style={styles.image}/>
+                        <Image source={{uri: this.state.image}} style={styles.image}/>
                     </CardItem>
                     <CardItem cardBody style={styles.cardText}>
                         <View>

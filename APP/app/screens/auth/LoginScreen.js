@@ -13,7 +13,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {Button, Footer} from 'native-base';
-import Config from 'react-native-config';
+  import Config from 'react-native-config';
 import axios from 'axios';
 
 export default class LoginScreen extends Component {
@@ -72,8 +72,8 @@ export default class LoginScreen extends Component {
   }
 
   _signInAsync = async () => {
-    console.log('Clicked', Config.BASE_URL);
-    fetch('http://' + Config.BASE_URL + ':3000/auth/residentLogin', {
+    console.log('Clicked', Config.BASE_URL, Config.AWS_S3_FOLDER);
+    fetch('http://'+Config.BASE_URL+':3000/auth/residentLogin', {
       method: 'post',
       headers: {
         Accept: 'application/json',

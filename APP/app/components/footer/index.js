@@ -43,13 +43,13 @@ export const FooterNavigator = createBottomTabNavigator(
         tabBarIcon: ({tintColor}) => icon('edit', tintColor),
       },
     },
-    Notifications: {
-      screen: Notifications,
-      navigationOptions: {
-        tabBarLabel: 'Notifications',
-        tabBarIcon: ({tintColor}) => icon('bell', tintColor),
-      },
-    },
+    // Notifications: {
+    //   screen: Notifications,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Notifications',
+    //     tabBarIcon: ({tintColor}) => icon('bell', tintColor),
+    //   },
+    // },
     Sos: {
       screen: Sos,
       navigationOptions: {

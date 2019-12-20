@@ -1,4 +1,5 @@
 import React from 'react';
+import {TouchableOpacity, Image} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 // import { createDrawerNavigator } from 'react-navigation-drawer'
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
@@ -13,6 +14,10 @@ import ForgotauthScreen from '../screens/auth/forgotauth';
 import {FooterNavigator} from '../components/footer/index';
 import PostDetail from '../screens/Post/detail/index';
 import PostMedia from '../screens/Post/detail/postMedia';
+import Profile from '../screens/profile/editProfile';
+import DrawerScreen  from '../screens/drawer'
+import sosinfoscreen from '../screens/SOSinfo';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import PostComments from '../screens/Post/detail/postComments';
 import PostVerify from '../screens/Post/verfiy/index'
 
@@ -62,43 +67,66 @@ const postDetailNavigator = createMaterialBottomTabNavigator(
 );
 
 const appNavigator = createStackNavigator(
-    {
-        FooterNavigator,
-        postDetailNavigator,
-        feedscreen: {screen: Feedscreen},
-        // postscreen: {screen: Postscreen},
+  {
+    feedscreen: {
+      screen: Feedscreen,
     },
-    {
-        defaultNavigationOptions: {
-            header: null,
-            initialRouteName: 'FooterNavigator',
-        },
+    SOSinfo: {  
+      screen: sosinfoscreen,
+    },
+    FooterNavigator,
+    postDetailNavigator,
+  },
+  {
+      headerMode: 'none',
+      initialRouteName: 'FooterNavigator',
     },
 );
 
 const authStack = createSwitchNavigator(
-    {
-        loginscreen: {screen: LoginScreen},
-        signupscreen: {screen: SignupScreen},
-        forgotauth: {screen: ForgotauthScreen},
-    },
-    {
-        initialRouteName: 'loginscreen',
-        headerMode: 'none',
-    },
+  {
+    loginscreen: {screen: LoginScreen},
+    signupscreen: {screen: SignupScreen},
+    forgotauth: {screen: ForgotauthScreen},
+  },
+  {
+    initialRouteName: 'loginscreen',
+    headerMode: 'none',
+  },
 );
+
+const appDrawer = createDrawerNavigator({
+  Home: {
+    screen: appNavigator,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  
+},{
+    initialRouteName: 'Home',
+    contentComponent: DrawerScreen,
+    drawerWidth: 300
+})
 
 const Appcontainer = createAppContainer(
-    createSwitchNavigator(
-        {
-            Authloading: Authloadingscreen,
-            Auth: authStack,
-            App: appNavigator,
-        },
-        {
-            initialRouteName: 'Authloading',
-        },
-    ),
+  createSwitchNavigator(
+    {
+      App: {
+        screen: appDrawer,
+      },
+      Authloading: Authloadingscreen,
+      Auth: authStack,\
+    },
+    {
+        initialRouteName: 'Authloading',
+        headerMode: 'none',
+    },
+  ),
+  // appNavigator
 );
 
-export default Appcontainer;
+const prefix = 'http://'
+const MainApp = () => <Appcontainer uriPrefix={prefix} />
+
+export default MainApp;
