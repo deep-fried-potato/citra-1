@@ -10,6 +10,11 @@
 ## Use Case Diagram
 ![Use Case Diagram](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/CITRA.png)
 
+## Screens
+![Home](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/s1.png)
+![Create](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/s2.png)
+![SOS](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/s3.png)
+
 ## How To Run This Project
 > Setup
 * Install `react-native` by following [this](https://facebook.github.io/react-native/docs/getting-started) link
