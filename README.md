@@ -27,10 +27,12 @@
     * `API_KEY` for Google Maps.
    
 > Run
+
 To run app:-
 * `cd APP/`
 * In one terminal run `react-native run-android`
 * In another terminal run `react-native start`
+
 To run server:-
 * cd `BACKEND/`
 * cd `npm start`
