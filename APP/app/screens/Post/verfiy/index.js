@@ -85,7 +85,7 @@ class VerifyPost extends Component {
                         'positive':this.state.positive,
                         'photo': this.state.media[0],
                         '_id':this.props.navigation.getParam('post')[0]['_id']
-                        
+
                     }, {headers: headers})
                         .then(()=>{
                             console.log('verify data is ',{
@@ -145,7 +145,7 @@ class VerifyPost extends Component {
                     source={{uri: media}}
                     style={styles.media}
                 />)
-        ))
+        ));
 
         return (
             <SafeAreaView>
