@@ -6,3 +6,6 @@
 ![Comparison Matrix](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/4.png)
 ![DBSchema](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/6.png)
 ![TechStack](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/7.png)
+
+## Use Case Diagram
+![Use Case Diagram](https://github.com/Vineet-Sharma29/citra/blob/master/DOCS/CITRA.png)
